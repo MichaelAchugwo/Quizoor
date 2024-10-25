@@ -14,7 +14,7 @@ export default function Home() {
           a knowledge enthusiast, Quizoor offers a personalized approach to
           learning and testing your knowledge. Our goal is to help you learn at
           your own pace, while keeping track of your progress. With
-          Quizoor&aposs tools for designing questions, managing topics, and
+          Quizoor&apos;s tools for designing questions, managing topics, and
           tracking scores, quiz-making and taking becomes a seamless, efficient,
           and productive experience.
         </p>
