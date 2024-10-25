@@ -10,7 +10,7 @@ export default function Home() {
           learning accessible, interactive, and enjoyable. Created with a focus
           on simplicity and ease of use, Quizoor empowers users to create custom
           quizzes, take quizzes on a wide variety of topics, and share knowledge
-          in a dynamic and engaging way. Whether you're a student, educator, or
+          in a dynamic and engaging way. Whether you&apos;re a student, educator, or
           a knowledge enthusiast, Quizoor offers a personalized approach to
           learning and testing your knowledge. Our goal is to help you learn at
           your own pace, while keeping track of your progress. With
