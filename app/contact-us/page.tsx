@@ -7,7 +7,7 @@ export default function Home() {
     <>
       <div className="md:text-center text-2xl z-1 relative px-[50px] mt-10 flex place-items-center justify-center min-h-[65dvh]">
         <div className="flex text-center flex-col gap-y-5 mt-5">
-          <p>
+          <p className="mb-3">
             We&apos;d love to hear from you! Whether you have questions,
             feedback, or need support with Quizoor, feel free to get in touch.
           </p>
