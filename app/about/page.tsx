@@ -5,7 +5,7 @@ export default function Home() {
         <h1 className="text-4xl text-center text-[#C3F094] font-bold mb-6">
           About Us
         </h1>
-        <p className="text-2xl text-center md:text-justify leading-loose mt-3">
+        <p className="text-2xl text-center md:text-justify leading-loose mt-3 mb-9">
           Quizoor is an intuitive platform designed to make quiz creation and
           learning accessible, interactive, and enjoyable. Created with a focus
           on simplicity and ease of use, Quizoor empowers users to create custom
