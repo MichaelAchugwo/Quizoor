@@ -3,6 +3,7 @@ import { useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import MenuIcon from "@mui/icons-material/Menu";
+import CloseIcon from '@mui/icons-material/Close';
 
 interface NavbarProps {
   toggleVideo: boolean;
@@ -24,7 +25,11 @@ export default function Navbar({ toggleVideo }: NavbarProps) {
           <Image alt="Quizoor Logo" src="/quizoorLogo.png" fill />
         </Link>
         <button onClick={() => toggleNav(navToggle)} className="md:hidden">
-          <MenuIcon sx={{ fontSize: 30 }} />
+          {navToggle ? (
+            <MenuIcon sx={{ fontSize: 30 }} />
+          ) : (
+            <CloseIcon sx={{ fontSize: 30 }} />
+          )}
         </button>
       </div>
       <div
