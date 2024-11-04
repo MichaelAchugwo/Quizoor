@@ -3,7 +3,7 @@ import { useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import MenuIcon from "@mui/icons-material/Menu";
-import CloseIcon from '@mui/icons-material/Close';
+import CloseIcon from "@mui/icons-material/Close";
 
 interface NavbarProps {
   toggleVideo: boolean;
@@ -22,7 +22,12 @@ export default function Navbar({ toggleVideo }: NavbarProps) {
     >
       <div className="flex md:inline-block justify-between">
         <Link href="/" className="inline-block h-[35px] w-[140px] relative">
-          <Image alt="Quizoor Logo" src="/quizoorLogo.png" fill />
+          <Image
+            alt="Quizoor Logo"
+            src="/quizoorLogo.png"
+            sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+            fill
+          />
         </Link>
         <button onClick={() => toggleNav(navToggle)} className="md:hidden">
           {navToggle ? (

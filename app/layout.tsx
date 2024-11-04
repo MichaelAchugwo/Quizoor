@@ -15,7 +15,7 @@ export default function RootLayout({
   const [videoToggle, enableVideo] = useState(true);
   const pathname = usePathname();
   useEffect(() => {
-    if (pathname.startsWith("/quiz")) {
+    if (pathname.startsWith("/quiz") || pathname.startsWith("/login")) {
       enableVideo(false);
     } else {
       enableVideo(true);
