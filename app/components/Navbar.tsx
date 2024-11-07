@@ -43,13 +43,13 @@ export default function Navbar({ toggleVideo }: NavbarProps) {
         } md:max-h-none`}
       >
         <div
-          className={`font-semibold text-lg text-center md:text-start md:me-[50px] ${
+          className={`font-semibold text-lg text-center md:text-start ${
             toggleVideo ? "text-[#C3F094]" : "text-[#066C5D]"
           }`}
         >
           <Link
             href="/"
-            className={`hover:border-b-2 md:mx-5 block md:inline-block mb-3 md:mb-0 ${
+            className={`hover:border-b-2 md:mx-7 block md:inline-block mb-3 md:mb-0 ${
               toggleVideo
                 ? "hover:border-b-[#C3F094]"
                 : "hover:border-b-[#066C5D]"
@@ -62,7 +62,7 @@ export default function Navbar({ toggleVideo }: NavbarProps) {
           </Link>
           <Link
             href="/about"
-            className={`hover:border-b-2 md:mx-5 block md:inline-block mb-3 md:mb-0 ${
+            className={`hover:border-b-2 md:mx-7 block md:inline-block mb-3 md:mb-0 ${
               toggleVideo
                 ? "hover:border-b-[#C3F094]"
                 : "hover:border-b-[#066C5D]"
@@ -78,7 +78,7 @@ export default function Navbar({ toggleVideo }: NavbarProps) {
             onClick={() => {
               toggleNav(navToggle);
             }}
-            className={`hover:border-b-2 md:mx-5 block md:inline-block mb-3 md:mb-0 ${
+            className={`hover:border-b-2 md:mx-7 block md:inline-block mb-3 md:mb-0 ${
               toggleVideo
                 ? "hover:border-b-[#C3F094]"
                 : "hover:border-b-[#066C5D]"
@@ -91,33 +91,13 @@ export default function Navbar({ toggleVideo }: NavbarProps) {
             onClick={() => {
               toggleNav(navToggle);
             }}
-            className={`hover:border-b-2 md:mx-5 block md:inline-block mb-3 md:mb-0 ${
+            className={`hover:border-b-2 md:mx-7 block md:inline-block mb-3 md:mb-0 ${
               toggleVideo
                 ? "hover:border-b-[#C3F094]"
                 : "hover:border-b-[#066C5D]"
             }`}
           >
             FAQ
-          </Link>
-        </div>
-        <div className="text-center md:text-start my-7 md:my-0">
-          <Link
-            href="/quiz/create"
-            className="p-2 px-4 bg-[#066C5D] text-white font-semibold rounded-md"
-            onClick={() => {
-              toggleNav(navToggle);
-            }}
-          >
-            Create Quiz
-          </Link>
-          <Link
-            href="/quiz"
-            className="p-2 px-4 bg-[#C3F094] text-black font-semibold rounded-md ml-2"
-            onClick={() => {
-              toggleNav(navToggle);
-            }}
-          >
-            Take a Quiz
           </Link>
         </div>
       </div>

@@ -3,7 +3,7 @@ import Link from "next/link";
 export default function Hero() {
   return (
     <div className="text-center px-[70px] md:px-[200px] mt-[30px] md:mt-[60px]">
-      <div className={`mb-7`}>
+      <div className="mb-5">
         <h1 className="text-4xl md:text-7xl font-bold text-white leading-relaxed md:leading-relaxed mb-[30px] md:mb-[50px]">
           Easily create or take{" "}
           <span className="bg-custom-gradient bg-clip-text text-transparent italic">

@@ -20,7 +20,7 @@ export default function FaqQuestion({
       <div
         className={`${
           faqClicked ? "border-b-2 border-white" : ""
-        }border-white hover:border-b-2 md:border-b-2 md:border-white flex justify-between pb-3`}
+        }border-white hover:border-b-2 md:border-white flex justify-between pb-3`}
         onClick={onToggle}
       >
         <p>{question}</p>

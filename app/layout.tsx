@@ -44,7 +44,7 @@ export default function RootLayout({
           Your browser does not support the video tag.
         </video>
         <Navbar toggleVideo={videoToggle} />
-        {children}
+        <div className="overflow-y-scroll max-h-[85dvh] no-scrollbar">{children}</div>
         <Footer />
       </body>
     </html>

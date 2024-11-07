@@ -12,7 +12,7 @@ export default function Home() {
   return (
     <div className="text-justify z-1 relative px-[50px] mt-7 cursor-pointer">
       <h1 className="text-3xl text-[#C3F094] font-bold mb-6">FAQ</h1>
-      <div className="flex flex-col gap-y-6 overflow-y-scroll">
+      <div className="flex flex-col gap-y-6">
         {faqData.map((faq, index) => (
           <FaqQuestion
             key={index}
