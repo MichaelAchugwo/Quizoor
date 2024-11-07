@@ -4,12 +4,16 @@ import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
 interface faqProps {
   question: string;
   answer: string;
+  key: number;
   faqClicked: boolean;
+  onToggle: () => void;
 }
+
 export default function FaqQuestion({
   question,
   answer,
   faqClicked,
+  onToggle
 }: faqProps) {
   return (
     <div className="text-xl text-white">
@@ -17,6 +21,7 @@ export default function FaqQuestion({
         className={`${
           faqClicked ? "border-b-2 border-white" : ""
         }border-white hover:border-b-2 md:border-b-2 md:border-white flex justify-between pb-3`}
+        onClick={onToggle}
       >
         <p>{question}</p>
         {faqClicked ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
