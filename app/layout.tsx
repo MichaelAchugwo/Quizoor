@@ -3,7 +3,7 @@ import "./globals.css";
 import styles from "./css/Hero.module.css";
 import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
-import Loader from "./components/extras/Loader"
+import Loader from "./components/extras/Loader";
 import { inter } from "./fonts/inter";
 import { useEffect, useState } from "react";
 import { usePathname } from "next/navigation";
@@ -27,9 +27,6 @@ export default function RootLayout({
     }, 2000);
     return () => clearTimeout(timer);
   }, [pathname]);
-  if (loading) {
-    return <Loader />;
-  }
   return (
     <html lang="en">
       <head>
@@ -41,22 +38,28 @@ export default function RootLayout({
           videoToggle ? "text-white" : "text-[#066C5D]"
         } min-h-[100dvh] min-w-[100dvw]`}
       >
-        <video
-          autoPlay
-          muted
-          loop
-          className={`${styles.backgroundVideo} ${
-            videoToggle ? " " : "hidden"
-          }`}
-        >
-          <source src="/videos/backgroundVideo.mp4" type="video/mp4" />
-          Your browser does not support the video tag.
-        </video>
-        <Navbar toggleVideo={videoToggle} />
-        <div className="overflow-y-scroll max-h-[85dvh] no-scrollbar">
-          {children}
-        </div>
-        <Footer />
+        {loading ? (
+          <Loader />
+        ) : (
+          <>
+            <video
+              autoPlay
+              muted
+              loop
+              className={`${styles.backgroundVideo} ${
+                videoToggle ? " " : "hidden"
+              }`}
+            >
+              <source src="/videos/backgroundVideo.mp4" type="video/mp4" />
+              Your browser does not support the video tag.
+            </video>
+            <Navbar toggleVideo={videoToggle} />
+            <div className="overflow-y-scroll max-h-[85dvh] no-scrollbar">
+              {children}
+            </div>
+            <Footer />
+          </>
+        )}
       </body>
     </html>
   );
