@@ -1,4 +1,5 @@
 "use client";
+import { Analytics } from "@vercel/analytics/react"
 import "./globals.css";
 import styles from "./css/Hero.module.css";
 import Navbar from "./components/Navbar";
@@ -56,6 +57,7 @@ export default function RootLayout({
             <Navbar toggleVideo={videoToggle} />
             <div className="overflow-y-scroll max-h-[85dvh] no-scrollbar">
               {children}
+              <Analytics />
             </div>
             <Footer />
           </>
