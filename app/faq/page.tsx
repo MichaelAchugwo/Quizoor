@@ -4,7 +4,6 @@ import FaqQuestion from "../components/extras/FaqQuestion";
 import { faqData } from "../lib/faqObjects";
 
 export default function Home() {
-  const [faqClicked, openFaq] = useState(false);
   const [activeIndex, setActiveIndex] = useState<number | null>(null);
   const handleToggle = (index: number) => {
     setActiveIndex(activeIndex === index ? null : index);
