@@ -3,6 +3,7 @@ import "./globals.css";
 import styles from "./css/Hero.module.css";
 import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
+import Loader from "./components/extras/Loader"
 import { inter } from "./fonts/inter";
 import { useEffect, useState } from "react";
 import { usePathname } from "next/navigation";
@@ -12,6 +13,7 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const [loading, setLoading] = useState(true);
   const [videoToggle, enableVideo] = useState(true);
   const pathname = usePathname();
   useEffect(() => {
@@ -20,7 +22,14 @@ export default function RootLayout({
     } else {
       enableVideo(true);
     }
+    const timer = setTimeout(() => {
+      setLoading(false);
+    }, 2000);
+    return () => clearTimeout(timer);
   }, [pathname]);
+  if (loading) {
+    return <Loader />;
+  }
   return (
     <html lang="en">
       <head>
@@ -44,7 +53,9 @@ export default function RootLayout({
           Your browser does not support the video tag.
         </video>
         <Navbar toggleVideo={videoToggle} />
-        <div className="overflow-y-scroll max-h-[85dvh] no-scrollbar">{children}</div>
+        <div className="overflow-y-scroll max-h-[85dvh] no-scrollbar">
+          {children}
+        </div>
         <Footer />
       </body>
     </html>

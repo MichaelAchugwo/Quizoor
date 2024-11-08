@@ -100,6 +100,26 @@ export default function Navbar({ toggleVideo }: NavbarProps) {
             FAQ
           </Link>
         </div>
+        <div className={`text-center md:text-start my-7 md:my-0 ${toggleVideo ? "hidden" : ""}`}>
+          <Link
+            href="/quiz/create"
+            className="p-2 px-4 bg-[#066C5D] text-white font-semibold rounded-md md:ml-5"
+            onClick={() => {
+              toggleNav(navToggle);
+            }}
+          >
+            Create Quiz
+          </Link>
+          <Link
+            href="/quiz"
+            className="p-2 px-4 bg-[#C3F094] text-black font-semibold rounded-md ml-5"
+            onClick={() => {
+              toggleNav(navToggle);
+            }}
+          >
+            Take a Quiz
+          </Link>
+        </div>
       </div>
     </header>
   );
