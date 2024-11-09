@@ -1,7 +1,7 @@
 "use client";
 import { useState } from "react";
-import FaqQuestion from "../components/extras/FaqQuestion";
-import { faqData } from "../lib/faqObjects";
+import FaqQuestion from "../../components/extras/FaqQuestion";
+import { faqData } from "../../lib/faqObjects";
 
 export default function Home() {
   const [activeIndex, setActiveIndex] = useState<number | null>(null);
