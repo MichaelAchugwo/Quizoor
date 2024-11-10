@@ -1,4 +1,4 @@
-"use client";
+"use client"
 import { useState } from "react";
 import FaqQuestion from "../../components/FaqQuestion";
 import { faqData } from "../../lib/faqObjects";

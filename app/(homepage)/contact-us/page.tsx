@@ -1,6 +1,12 @@
 import Link from "next/link";
 import MailOutlineIcon from "@mui/icons-material/MailOutline";
 import ContactPhoneIcon from "@mui/icons-material/ContactPhone";
+import type { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Contact Us - Quizoor",
+  description: "We'd love to hear from you! Whether you have questions, feedback, or need support with Quizoor, feel free to get in touch.",
+};
 
 export default function Home() {
   return (
