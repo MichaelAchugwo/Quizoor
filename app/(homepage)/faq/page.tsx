@@ -1,6 +1,6 @@
 "use client";
 import { useState } from "react";
-import FaqQuestion from "../../components/extras/FaqQuestion";
+import FaqQuestion from "../../components/FaqQuestion";
 import { faqData } from "../../lib/faqObjects";
 
 export default function Home() {

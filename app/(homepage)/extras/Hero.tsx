@@ -11,16 +11,16 @@ export default function Hero() {
           </span>{" "}
           made by people from around the globe.
         </h1>
-        <div className="flex justify-center text-xl gap-2">
+        <div className="flex justify-center text-xl gap-4">
           <Link
-            href="/quiz/create"
-            className="p-3 px-5 bg-[#066C5D] text-white font-semibold rounded-md "
+            href="/create-quiz"
+            className="font-semibold py-4 px-6 bg-[#066C5D] text-white rounded-md "
           >
             Create Quiz
           </Link>
           <Link
             href="/quiz"
-            className="p-3 px-5 bg-[#C3F094] text-black font-semibold rounded-md"
+            className="font-semibold py-4 px-5 bg-[#C3F094] text-black rounded-md"
           >
             Take a Quiz
           </Link>

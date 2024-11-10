@@ -1,9 +1,8 @@
-import Hero from "@/app/(homepage)/extras/Hero";
-
+"use client";
 export default function Home() {
   return (
     <div>
-      <Hero />
+      <h1 className="text-4xl">Login</h1>
     </div>
   );
 }

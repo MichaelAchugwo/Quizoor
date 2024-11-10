@@ -1,8 +1,8 @@
 "use client";
 import "../globals.css";
-import Navbar from "../components/Navbar";
-import Footer from "../components/Footer";
-import Loader from "./Loader";
+import Navbar from "./extras/Navbar";
+import Footer from "./extras/Footer";
+import Loader from "./extras/Loader";
 import { useEffect, useState } from "react";
 import styles from "../css/Hero.module.css";
 

@@ -12,7 +12,7 @@ export default function Navbar() {
   };
   return (
     <header
-      className={`p-5 px-[50px] md:flex md:justify-between md:place-items-center`}
+      className={`p-5 px-[50px] md:flex md:justify-between md:place-items-center bg-white shadow-sm sticky top-0 w-screen z-[10000]`}
     >
       <div className="flex md:inline-block justify-between">
         <Link href="/" className="inline-block h-[35px] w-[140px] relative">
@@ -37,13 +37,11 @@ export default function Navbar() {
         } md:max-h-none`}
       >
         <div
-          className={`font-semibold text-lg text-center md:text-start
-            text-[#C3F094]
-          }`}
+          className={`text-lg text-center md:text-start text-[#066c5d]}`}
         >
           <Link
             href="/home"
-            className={`hover:border-b-2 md:mx-7 block md:inline-block mb-3 md:mb-0 hover:border-b-[#C3F094]`}
+            className={`hover:border-b-2 md:mx-5 block md:inline-block mb-3 md:mb-0 hover:border-b-[#066c5d]`}
             onClick={() => {
               toggleNav(navToggle);
             }}
@@ -52,7 +50,7 @@ export default function Navbar() {
           </Link>
           <Link
             href="/about"
-            className={`hover:border-b-2 md:mx-7 block md:inline-block mb-3 md:mb-0 hover:border-b-[#C3F094]`}
+            className={`hover:border-b-2 md:mx-5 block md:inline-block mb-3 md:mb-0 hover:border-b-[#066c5d]`}
             onClick={() => {
               toggleNav(navToggle);
             }}
@@ -64,7 +62,7 @@ export default function Navbar() {
             onClick={() => {
               toggleNav(navToggle);
             }}
-            className={`hover:border-b-2 md:mx-7 block md:inline-block mb-3 md:mb-0 hover:border-b-[#C3F094]`}
+            className={`hover:border-b-2 md:mx-5 block md:inline-block mb-3 md:mb-0 hover:border-b-[#066c5d]`}
           >
             Contact Us
           </Link>
@@ -73,9 +71,29 @@ export default function Navbar() {
             onClick={() => {
               toggleNav(navToggle);
             }}
-            className={`hover:border-b-2 md:mx-7 block md:inline-block mb-3 md:mb-0 hover:border-b-[#C3F094]`}
+            className={`hover:border-b-2 md:mx-5 block md:inline-block mb-3 md:mb-0 hover:border-b-[#066c5d]`}
           >
             FAQ
+          </Link>
+        </div>
+        <div className="text-center md:text-start my-7 md:my-0 md:ml-7">
+          <Link
+            href="/create-quiz"
+            className="p-2 px-4 bg-[#066C5D] text-white rounded-md"
+            onClick={() => {
+              toggleNav(navToggle);
+            }}
+          >
+            Create Quiz
+          </Link>
+          <Link
+            href="/quiz"
+            className="p-2 px-4 bg-[#C3F094] text-black rounded-md ml-2"
+            onClick={() => {
+              toggleNav(navToggle);
+            }}
+          >
+            Take a Quiz
           </Link>
         </div>
       </div>
