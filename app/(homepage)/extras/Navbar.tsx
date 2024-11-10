@@ -23,7 +23,7 @@ export default function Navbar() {
             fill
           />
         </Link>
-        <button onClick={() => toggleNav(navToggle)} className="md:hidden">
+        <button onClick={() => toggleNav(navToggle)} className="md:hidden text-white">
           {navToggle ? (
             <MenuIcon sx={{ fontSize: 30 }} />
           ) : (

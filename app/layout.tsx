@@ -5,6 +5,7 @@ import { poppins } from "./fonts/poppins";
 import { useEffect } from "react";
 import { redirect } from "next/navigation";
 import { usePathname } from "next/navigation";
+// import { connectToDB } from "./api/connect";
 
 export default function RootLayout({
   children,
@@ -13,6 +14,7 @@ export default function RootLayout({
 }>) {
   const pathname = usePathname();
   useEffect(() => {
+    // connectToDB();
     if (pathname === "/") {
       redirect("/home");
     }
