@@ -1,9 +1,8 @@
-import type { NextApiRequest, NextApiResponse } from "next";
 import { MongoClient, ServerApiVersion } from "mongodb";
 import dotenv from "dotenv";
 
 dotenv.config();
-const uri = process.env.uri as string;
+const uri = process.env.NEXT_PUBLIC_URI as string;
 const client = new MongoClient(uri, {
   serverApi: {
     version: ServerApiVersion.v1,
@@ -27,7 +26,7 @@ async function run() {
   }
 }
 
-export async function connectToDB(req: NextApiRequest, res: NextApiResponse) {
+export async function connectToDB() {
   await run().catch(console.dir);
-  res.status(200).json({ message: 'Connected to MongoDB' });
+  console.log("Connected to DB")
 }

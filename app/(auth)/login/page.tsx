@@ -4,8 +4,13 @@ import Link from "next/link";
 import ArrowBackIosIcon from "@mui/icons-material/ArrowBackIos";
 import { Button, Divider } from "@mui/material";
 import GoogleIcon from "../extras/GoogleIcon";
+import { signInToGoogle, checkSession } from "@/app/lib/actions";
+import { useEffect } from "react";
 
 export default async function LoginPage() {
+  useEffect(() => {
+    checkSession("Done");
+  }, []);
   return (
     <div className="container flex h-screen w-screen flex-col items-center justify-center ">
       <Link
@@ -34,9 +39,9 @@ export default async function LoginPage() {
         <div className="mt-8">
           <Button
             fullWidth
-            variant="outlined"
             startIcon={<GoogleIcon />}
             className="py-2 bg-[#066C5D] hover:bg-[#066c5de9] text-white font-semibold"
+            onClick={() => signInToGoogle("Done")}
           >
             Continue with Google
           </Button>
