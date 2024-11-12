@@ -1,13 +1,18 @@
 "use server";
-import { auth, signIn } from "@/auth";
+import { auth, signIn, signOut } from "@/auth";
+import { redirect } from "next/navigation";
 
 export const signInToGoogle = async (message: string) => {
-  await signIn("google");
+  await signIn("google", { redirectTo: "/quiz" });
   console.log(message);
+};
+
+export const signUserOut = async (message: string) => {
+  await signOut();
+  redirect("/login");
 };
 
 export const checkSession = async (message: string) => {
   const session = await auth();
-  console.log(session);
-  console.log(message);
+  return session;
 };

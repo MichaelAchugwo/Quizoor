@@ -4,6 +4,9 @@ import Link from "next/link";
 import Image from "next/image";
 import MenuIcon from "@mui/icons-material/Menu";
 import CloseIcon from "@mui/icons-material/Close";
+import LogoutIcon from "@mui/icons-material/Logout";
+import { Button } from "@mui/material";
+import { signUserOut } from "@/app/lib/actions";
 
 export default function Navbar() {
   const [navToggle, toggleNavBar] = useState(true);
@@ -36,9 +39,7 @@ export default function Navbar() {
           navToggle ? "max-h-0" : "max-h-[500px]"
         } md:max-h-none`}
       >
-        <div
-          className={`text-lg text-center md:text-start text-[#066c5d]}`}
-        >
+        <div className={`text-lg text-center md:text-start text-[#066c5d]}`}>
           <Link
             href="/home"
             className={`hover:border-b-2 md:mx-5 block md:inline-block mb-3 md:mb-0 hover:border-b-[#066c5d]`}
@@ -76,7 +77,7 @@ export default function Navbar() {
             FAQ
           </Link>
         </div>
-        <div className="text-center md:text-start my-7 md:my-0 md:ml-7">
+        <div className="text-center md:text-start my-7 md:my-0 md:ml-7 flex flex-row justify-center gap-3">
           <Link
             href="/create-quiz"
             className="p-2 px-4 bg-[#066C5D] text-white rounded-md"
@@ -88,13 +89,22 @@ export default function Navbar() {
           </Link>
           <Link
             href="/quiz"
-            className="p-2 px-4 bg-[#C3F094] text-black rounded-md ml-2"
+            className="p-2 px-4 bg-[#C3F094] text-black rounded-md"
             onClick={() => {
               toggleNav(navToggle);
             }}
           >
             Take a Quiz
           </Link>
+          <Button
+            className="bg-[#066C5D] text-white p-2 px-3 md:px-0 rounded-md"
+            onClick={() => {
+              signUserOut("Done");
+            }}
+          >
+            <span className="md:hidden">Logout</span>
+            <LogoutIcon />
+          </Button>
         </div>
       </div>
     </header>
