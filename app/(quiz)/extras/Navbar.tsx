@@ -96,16 +96,16 @@ export default function Navbar() {
           >
             Take a Quiz
           </Link>
-          <Button
-            className="bg-[#066C5D] text-white p-2 px-3 md:px-0 rounded-md"
+          <button
+            role="button"
+            className="bg-[#066C5D] text-white p-2 px-3 rounded-md"
             onClick={() => {
               signUserOut("Done");
             }}
-            variant="contained"
           >
-            <span className="md:hidden">Logout</span>
+            <span className="md:hidden mr-2">Logout</span>
             <LogoutIcon />
-          </Button>
+          </button>
         </div>
       </div>
     </header>

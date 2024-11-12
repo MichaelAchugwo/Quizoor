@@ -38,17 +38,15 @@ export default function LoginPage() {
           </Divider>
         </div>
         <div className="mt-8" suppressHydrationWarning>
-          <Button
-            fullWidth
-            startIcon={<GoogleIcon />}
-            className="py-2 bg-[#066C5D] hover:bg-[#066c5de9] text-white font-semibold"
-            onClick={() => {
-              signInToGoogle("Done");
-            }}
-            variant="contained"
-          >
-            Continue with Google
-          </Button>
+            <button
+              className="py-3 px-5 bg-[#066C5D] hover:bg-[#066c5de9] text-white font-semibold flex justify-center gap-4 w-full rounded-md"
+              onClick={() => {
+                signInToGoogle("Done");
+              }}
+            >
+              <GoogleIcon />
+              Continue with Google
+            </button>
         </div>
       </div>
     </div>
