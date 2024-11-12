@@ -34,7 +34,7 @@ export default function Navbar() {
         </button>
       </div>
       <div
-        className={`md:flex md:flex-row md:py-2 mt-3 md:mt-0 overflow-hidden transition-all duration-500 ease-in-out ${
+        className={`md:flex md:flex-row place-items-center md:py-2 mt-3 md:mt-0 overflow-hidden transition-all duration-500 ease-in-out ${
           navToggle ? "max-h-0" : "max-h-[500px]"
         } md:max-h-none`}
       >
