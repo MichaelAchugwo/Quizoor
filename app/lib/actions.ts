@@ -15,5 +15,6 @@ export const signUserOut = async (message: string) => {
 
 export const checkSession = async (message: string) => {
   const session = await auth();
+  console.log(message);
   return session;
 };
