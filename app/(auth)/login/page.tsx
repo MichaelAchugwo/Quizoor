@@ -45,6 +45,7 @@ export default function LoginPage() {
             onClick={() => {
               signInToGoogle("Done");
             }}
+            variant="contained"
           >
             Continue with Google
           </Button>

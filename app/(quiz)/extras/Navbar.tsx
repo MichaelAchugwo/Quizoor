@@ -101,6 +101,7 @@ export default function Navbar() {
             onClick={() => {
               signUserOut("Done");
             }}
+            variant="contained"
           >
             <span className="md:hidden">Logout</span>
             <LogoutIcon />
