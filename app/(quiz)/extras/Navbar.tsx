@@ -5,7 +5,6 @@ import Image from "next/image";
 import MenuIcon from "@mui/icons-material/Menu";
 import CloseIcon from "@mui/icons-material/Close";
 import LogoutIcon from "@mui/icons-material/Logout";
-import { Button } from "@mui/material";
 import { signUserOut } from "@/app/lib/actions";
 
 export default function Navbar() {

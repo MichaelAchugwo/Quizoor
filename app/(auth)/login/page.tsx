@@ -2,7 +2,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import ArrowBackIosIcon from "@mui/icons-material/ArrowBackIos";
-import { Button, Divider } from "@mui/material";
+import { Divider } from "@mui/material";
 import GoogleIcon from "../extras/GoogleIcon";
 import { signInToGoogle } from "@/app/lib/actions";
 
