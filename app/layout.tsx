@@ -18,7 +18,7 @@ export default function RootLayout({
     if (pathname === "/") {
       redirect("/home");
     }
-  }, []);
+  }, [pathname]);
   return (
     <html lang="en">
       <head>

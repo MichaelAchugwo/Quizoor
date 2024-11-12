@@ -9,6 +9,7 @@ export const signInToGoogle = async (message: string) => {
 
 export const signUserOut = async (message: string) => {
   await signOut();
+  console.log(message);
   redirect("/login");
 };
 
