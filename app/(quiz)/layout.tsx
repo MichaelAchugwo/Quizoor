@@ -2,6 +2,7 @@ import Navbar from "./extras/Navbar";
 import Footer from "./extras/Footer";
 import { redirect } from "next/navigation";
 import { checkSession } from "../lib/actions";
+import { connectToDB } from "../lib/connect";
 
 export default async function RootLayout({
   children,
@@ -12,6 +13,7 @@ export default async function RootLayout({
   if (session === null) {
     redirect("/login");
   }
+  connectToDB();
   return (
     <>
       <Navbar />

@@ -1,9 +1,9 @@
 import { MongoClient, ServerApiVersion } from "mongodb";
-import dotenv from "dotenv";
 
-dotenv.config();
-const uri = process.env.NEXT_PUBLIC_URI as string;
+const uri = process.env.MONGODB_URI as string;
 const client = new MongoClient(uri, {
+  tls: true,
+  tlsAllowInvalidCertificates: true,
   serverApi: {
     version: ServerApiVersion.v1,
     strict: true,
@@ -20,6 +20,8 @@ async function run() {
     console.log(
       "Pinged your deployment. You successfully connected to MongoDB!"
     );
+  } catch (error) {
+    console.error(error);
   } finally {
     // Ensures that the client will close when you finish/error
     await client.close();
@@ -27,6 +29,7 @@ async function run() {
 }
 
 export async function connectToDB() {
+  console.log("Connecting to DB");
   await run().catch(console.dir);
-  console.log("Connected to DB")
+  console.log("Connected to DB");
 }
