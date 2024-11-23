@@ -7,7 +7,11 @@ import CloseIcon from "@mui/icons-material/Close";
 import LogoutIcon from "@mui/icons-material/Logout";
 import { signUserOut } from "@/app/lib/actions";
 
-export default function Navbar() {
+interface NavbarProps {
+  checkSession: Function;
+}
+
+export default function Navbar({ checkSession }: NavbarProps) {
   const [navToggle, toggleNavBar] = useState(true);
   const toggleNav = (bool: boolean) => {
     toggleNavBar(!bool);
@@ -100,6 +104,7 @@ export default function Navbar() {
             className="bg-[#066C5D] text-white p-2 px-3 rounded-md"
             onClick={() => {
               signUserOut("Done");
+              checkSession();
             }}
           >
             <span className="md:hidden mr-2">Logout</span>

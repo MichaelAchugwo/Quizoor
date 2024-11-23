@@ -17,7 +17,15 @@ export default function RootLayout({
   }, []);
   return (
     <>
-      <video autoPlay muted loop className={`${styles.backgroundVideo}`}>
+      <video
+        autoPlay
+        muted
+        loop
+        playsInline
+        disablePictureInPicture
+        controls={false}
+        className={`${styles.backgroundVideo}`}
+      >
         <source src="/videos/backgroundVideo.mp4" type="video/mp4" />
         Your browser does not support the video tag.
       </video>

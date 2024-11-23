@@ -13,7 +13,6 @@ export default async function RootLayout({
   children: React.ReactNode;
 }>) {
   const session = await checkSession("Done");
-  console.log(session)
   if (session !== null) {
     redirect("/quiz");
   }

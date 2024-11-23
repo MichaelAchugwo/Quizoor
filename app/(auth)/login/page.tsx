@@ -5,8 +5,11 @@ import ArrowBackIosIcon from "@mui/icons-material/ArrowBackIos";
 import { Divider } from "@mui/material";
 import GoogleIcon from "../extras/GoogleIcon";
 import { signInToGoogle } from "@/app/lib/actions";
+import { useSearchParams } from "next/navigation";
 
 export default function LoginPage() {
+  const searchParams = useSearchParams();
+  const redirectUrl = searchParams.get("redirectUrl") || "/"
   return (
     <div className="container flex h-screen w-screen flex-col items-center justify-center">
       <Link
@@ -38,15 +41,15 @@ export default function LoginPage() {
           </Divider>
         </div>
         <div className="mt-8" suppressHydrationWarning>
-            <button
-              className="py-3 px-5 bg-[#066C5D] hover:bg-[#066c5de9] text-white font-semibold flex justify-center gap-4 w-full rounded-md"
-              onClick={() => {
-                signInToGoogle("Done");
-              }}
-            >
-              <GoogleIcon />
-              Continue with Google
-            </button>
+          <button
+            className="py-3 px-5 bg-[#066C5D] hover:bg-[#066c5de9] text-white font-semibold flex justify-center gap-4 w-full rounded-md"
+            onClick={() => {
+              signInToGoogle(redirectUrl);
+            }}
+          >
+            <GoogleIcon />
+            Continue with Google
+          </button>
         </div>
       </div>
     </div>

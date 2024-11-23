@@ -1,23 +1,35 @@
+"use client";
 import Navbar from "./extras/Navbar";
 import Footer from "./extras/Footer";
-import { redirect } from "next/navigation";
+import { useEffect, useState } from "react";
+import { useRouter, usePathname } from "next/navigation";
 import { checkSession } from "../lib/actions";
-import { connectToDB } from "../lib/connect";
 
-export default async function RootLayout({
+export default function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const session = await checkSession("Done");
-  if (session === null) {
-    redirect("/login");
-  }
-  connectToDB();
+  const router = useRouter();
+  const pathName = usePathname();
+  const redirectUrl = `/login?redirectUrl=${pathName}`;
+  const [session, setSession] = useState();
+  const sessionCheck = async () => {
+    const currentSession = await checkSession("Done");
+    if (currentSession === null) {
+      router.push(redirectUrl);
+    } else {
+      setSession(session);
+    }
+  };
+  useEffect(() => {
+    sessionCheck();
+  }, [session]);
+
   return (
     <>
-      <Navbar />
-      <div className="overflow-y-scroll max-h-[85dvh] no-scrollbar">
+      <Navbar checkSession={sessionCheck} />
+      <div className="overflow-y-scroll px-5 max-h-[85dvh] no-scrollbar">
         {children}
       </div>
       <Footer />
