@@ -1,6 +1,5 @@
 "use server";
 import { auth, signIn, signOut } from "@/auth";
-import { redirect } from "next/navigation";
 
 export const signInToGoogle = async (redirectUrl: string) => {
   await signIn("google", { redirectTo: redirectUrl });

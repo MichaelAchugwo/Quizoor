@@ -6,13 +6,11 @@ import MenuIcon from "@mui/icons-material/Menu";
 import CloseIcon from "@mui/icons-material/Close";
 import LogoutIcon from "@mui/icons-material/Logout";
 import { signUserOut } from "@/app/lib/actions";
+import { useRouter } from "next/navigation";
 
-interface NavbarProps {
-  checkSession: Function;
-}
-
-export default function Navbar({ checkSession }: NavbarProps) {
+export default function Navbar({ session }: { session: any }) {
   const [navToggle, toggleNavBar] = useState(true);
+  const router = useRouter()
   const toggleNav = (bool: boolean) => {
     toggleNavBar(!bool);
   };
@@ -104,7 +102,9 @@ export default function Navbar({ checkSession }: NavbarProps) {
             className="bg-[#066C5D] text-white p-2 px-3 rounded-md"
             onClick={() => {
               signUserOut("Done");
-              checkSession();
+              if (session === null) {
+                router.push("/login")
+              }
             }}
           >
             <span className="md:hidden mr-2">Logout</span>

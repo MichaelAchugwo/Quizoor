@@ -12,23 +12,22 @@ export default function RootLayout({
 }>) {
   const router = useRouter();
   const pathName = usePathname();
-  const redirectUrl = `/login?redirectUrl=${pathName}`;
-  const [session, setSession] = useState();
-  const sessionCheck = async () => {
-    const currentSession = await checkSession("Done");
-    if (currentSession === null) {
-      router.push(redirectUrl);
-    } else {
-      setSession(session);
-    }
-  };
+  const redirectUrl = `/login?redirectUrl=${encodeURIComponent(pathName)}`;
+  const [session, setSession] = useState(null);
+
   useEffect(() => {
+    const sessionCheck = async () => {
+      const currentSession = await checkSession("Done");
+      if (!currentSession) {
+        router.push(redirectUrl);
+      }
+    };
     sessionCheck();
-  }, [session]);
+  }, []); // Empty dependency array ensures it runs only once on mount
 
   return (
     <>
-      <Navbar checkSession={sessionCheck} />
+      <Navbar session={session} /> {/* Pass session directly if needed */}
       <div className="overflow-y-scroll px-5 max-h-[85dvh] no-scrollbar">
         {children}
       </div>

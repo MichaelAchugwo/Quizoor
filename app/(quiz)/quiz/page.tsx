@@ -53,13 +53,16 @@ export default function Home() {
   return (
     <div className="mt-7">
       <h1 className="text-3xl font-semibold text-[#066C5D] text-center">
-        Take a Quiz
+        Take a Quiz, {user?.name?.split(" ")[0]}
       </h1>
       <form
         onSubmit={handleSearch}
         className="text-center mt-7 md:flex md:gap-4 md:place-items-center md:justify-center"
       >
-        <label htmlFor="searchQuery" className="text-xl block mb-3 md:mb-0 md:inline-block">
+        <label
+          htmlFor="searchQuery"
+          className="text-xl block mb-3 md:mb-0 md:inline-block"
+        >
           Have a Quiz ID?
         </label>
         <input
