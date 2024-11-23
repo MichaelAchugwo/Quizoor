@@ -1,8 +1,9 @@
 "use client";
-import { useEffect, useState, useRef } from "react";
+import { Suspense, useEffect, useState, useRef } from "react";
 import { useRouter, useSearchParams, usePathname } from "next/navigation";
 import type { User } from "next-auth";
 import { checkSession } from "@/app/lib/actions";
+import Loader from "../extras/Loader";
 
 function useDebouncedCallback(callback: (term: string) => void, delay: number) {
   const debounceTimer = useRef<NodeJS.Timeout | null>(null);
@@ -14,7 +15,7 @@ function useDebouncedCallback(callback: (term: string) => void, delay: number) {
   };
 }
 
-export default function Home() {
+function Home() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const pathname = usePathname();
@@ -85,5 +86,13 @@ export default function Home() {
         </button>
       </form>
     </div>
+  );
+}
+
+export default function Page() {
+  return (
+    <Suspense fallback={<Loader />}>
+      <Home />
+    </Suspense>
   );
 }
