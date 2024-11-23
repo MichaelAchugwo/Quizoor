@@ -7,10 +7,11 @@ import CloseIcon from "@mui/icons-material/Close";
 import LogoutIcon from "@mui/icons-material/Logout";
 import { signUserOut } from "@/app/lib/actions";
 import { useRouter } from "next/navigation";
+import type { Session } from "../layout";
 
-export default function Navbar({ session }: { session: any }) {
+export default function Navbar({ session }: { session: Session }) {
   const [navToggle, toggleNavBar] = useState(true);
-  const router = useRouter()
+  const router = useRouter();
   const toggleNav = (bool: boolean) => {
     toggleNavBar(!bool);
   };
@@ -103,7 +104,7 @@ export default function Navbar({ session }: { session: any }) {
             onClick={() => {
               signUserOut("Done");
               if (session === null) {
-                router.push("/login")
+                router.push("/login");
               }
             }}
           >

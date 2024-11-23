@@ -4,6 +4,12 @@ import Footer from "./extras/Footer";
 import { useEffect, useState } from "react";
 import { useRouter, usePathname } from "next/navigation";
 import { checkSession } from "../lib/actions";
+import { User } from "next-auth";
+
+export type Session = {
+  user?: User,
+  message?: string;
+} | null;
 
 export default function RootLayout({
   children,
@@ -13,13 +19,15 @@ export default function RootLayout({
   const router = useRouter();
   const pathName = usePathname();
   const redirectUrl = `/login?redirectUrl=${encodeURIComponent(pathName)}`;
-  const [session, setSession] = useState(null);
+  const [session, setSession] = useState<Session>(null);
 
   useEffect(() => {
     const sessionCheck = async () => {
-      const currentSession = await checkSession("Done");
+      const currentSession = await checkSession("Done") as Session;
       if (!currentSession) {
         router.push(redirectUrl);
+      } else {
+        setSession(currentSession);
       }
     };
     sessionCheck();
