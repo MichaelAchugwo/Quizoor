@@ -8,9 +8,11 @@ import LogoutIcon from "@mui/icons-material/Logout";
 import { signUserOut } from "@/app/lib/actions";
 import { useRouter } from "next/navigation";
 import type { Session } from "../layout";
+import { CircularProgress } from "@mui/material";
 
 export default function Navbar({ session }: { session: Session }) {
   const [navToggle, toggleNavBar] = useState(true);
+  const [loading, setLoading] = useState(false);
   const router = useRouter();
   const toggleNav = (bool: boolean) => {
     toggleNavBar(!bool);
@@ -101,15 +103,14 @@ export default function Navbar({ session }: { session: Session }) {
           <button
             role="button"
             className="bg-[#066C5D] text-white p-2 px-3 rounded-md"
-            onClick={() => {
-              signUserOut("Done");
-              if (session === null) {
-                router.push("/login");
-              }
+            onClick={async () => {
+              setLoading(true);
+              await signUserOut("Done");
+              router.push("/login?redirectUrl=quiz");
             }}
           >
             <span className="md:hidden mr-2">Logout</span>
-            <LogoutIcon />
+            {loading ? <CircularProgress color="primary" size={20}/> : <LogoutIcon />}
           </button>
         </div>
       </div>

@@ -1,13 +1,14 @@
 "use client";
 import Navbar from "./extras/Navbar";
 import Footer from "./extras/Footer";
-import { useEffect, useState } from "react";
+import { Suspense, useEffect, useState } from "react";
 import { useRouter, usePathname } from "next/navigation";
 import { checkSession } from "../lib/actions";
 import { User } from "next-auth";
+import Loader from "./extras/Loader";
 
 export type Session = {
-  user?: User,
+  user?: User;
   message?: string;
 } | null;
 
@@ -20,19 +21,28 @@ export default function RootLayout({
   const pathName = usePathname();
   const redirectUrl = `/login?redirectUrl=${encodeURIComponent(pathName)}`;
   const [session, setSession] = useState<Session>(null);
+  const [loading, setLoading] = useState<boolean>(true);
 
   useEffect(() => {
     const sessionCheck = async () => {
-      const currentSession = await checkSession("Done") as Session;
+      const currentSession = (await checkSession("Done")) as Session;
       if (!currentSession) {
         router.push(redirectUrl);
       } else {
         setSession(currentSession);
+        setLoading(false);
       }
     };
     sessionCheck();
-  }, []); // Empty dependency array ensures it runs only once on mount
+  }, []);
 
+  if(loading){
+    return(
+      <Suspense fallback={<Loader />}>
+        <Loader />
+      </Suspense>
+    )
+  }
   return (
     <>
       <Navbar session={session} /> {/* Pass session directly if needed */}

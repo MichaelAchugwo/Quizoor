@@ -1,9 +1,23 @@
 "use client";
-import { Suspense, useEffect, useState, useRef } from "react";
+import { useEffect, useState, useRef } from "react";
 import { useRouter, useSearchParams, usePathname } from "next/navigation";
 import type { User } from "next-auth";
-import { checkSession } from "@/app/lib/actions";
+import { checkSession, getAllQuizzes } from "@/app/lib/actions";
 import Loader from "../extras/Loader";
+
+type Question = {
+  question: string;
+  options: string[];
+  correctOption: string;
+};
+
+type Quiz = {
+  quizName: string;
+  creatorName: string;
+  startTime: string;
+  endTime: string;
+  questions: Question[];
+};
 
 function useDebouncedCallback(callback: (term: string) => void, delay: number) {
   const debounceTimer = useRef<NodeJS.Timeout | null>(null);
@@ -21,19 +35,28 @@ function Home() {
   const pathname = usePathname();
 
   const [user, setUser] = useState<User | null>(null);
-  const [query, setQuery] = useState("");
+  const [query, setQuery] = useState(() => searchParams.get("search") || "");
+  const [quizzes, setQuizzes] = useState<Quiz[] | null>(null);
 
   useEffect(() => {
-    const getUser = async () => {
+    const fetchUser = async () => {
       const userDetails = await checkSession("Done");
       setUser(userDetails?.user || null);
     };
-    const getParam = async () => {
-      const keyword = searchParams.get("search") || "";
-      setQuery(keyword);
+
+    const fetchQuizzes = async () => {
+      try {
+        const data = await getAllQuizzes();
+        console.log(data)
+        setQuizzes(data);
+      } catch (error) {
+        console.error("Failed to fetch quizzes", error);
+        setQuizzes([]); // Set empty array on failure
+      }
     };
-    getUser();
-    getParam();
+
+    fetchUser();
+    fetchQuizzes();
   }, []);
 
   const changeSearchParam = useDebouncedCallback((term: string) => {
@@ -56,6 +79,7 @@ function Home() {
       <h1 className="text-3xl font-semibold text-[#066C5D] text-center">
         Take a Quiz, {user?.name?.split(" ")[0]}
       </h1>
+
       <form
         onSubmit={handleSearch}
         className="text-center mt-7 md:flex md:gap-4 md:place-items-center md:justify-center"
@@ -85,14 +109,30 @@ function Home() {
           Find Quiz
         </button>
       </form>
+      <div className="mt-9">
+        <ul>
+          {quizzes === null ? (
+            <Loader smaller={true} />
+          ) : quizzes.length === 0 ? (
+            <p>No quizzes available currently.</p>
+          ) : (
+            quizzes.map((quiz) => (
+              <li className="mt-4">
+                <h2 className="text-lg font-semibold">{quiz.quizName}</h2>
+                <p>Created by: {quiz.creatorName}</p>
+                <p>
+                  Start: {new Date(quiz.startTime).toLocaleString()} | End:{" "}
+                  {new Date(quiz.endTime).toLocaleString()}
+                </p>
+              </li>
+            ))
+          )}
+        </ul>
+      </div>
     </div>
   );
 }
 
 export default function Page() {
-  return (
-    <Suspense fallback={<Loader />}>
-      <Home />
-    </Suspense>
-  );
+  return <Home />;
 }

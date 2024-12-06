@@ -1,5 +1,4 @@
 import type { Metadata } from "next";
-import { connectToDB } from "@/app/lib/connect";
 
 export const metadata: Metadata = {
   title: "Available Quizzes - Quizoor",
@@ -11,6 +10,5 @@ export default async function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  await connectToDB();
   return <>{children}</>;
 }
