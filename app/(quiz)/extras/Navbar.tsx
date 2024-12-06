@@ -7,7 +7,6 @@ import CloseIcon from "@mui/icons-material/Close";
 import LogoutIcon from "@mui/icons-material/Logout";
 import { signUserOut } from "@/app/lib/actions";
 import { useRouter } from "next/navigation";
-import type { Session } from "../layout";
 import { CircularProgress } from "@mui/material";
 
 export default function Navbar() {

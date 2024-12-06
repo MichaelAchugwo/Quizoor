@@ -20,7 +20,6 @@ export default function RootLayout({
   const router = useRouter();
   const pathName = usePathname();
   const redirectUrl = `/login?redirectUrl=${encodeURIComponent(pathName)}`;
-  const [session, setSession] = useState<Session>(null);
   const [loading, setLoading] = useState<boolean>(true);
 
   useEffect(() => {
@@ -29,7 +28,6 @@ export default function RootLayout({
       if (!currentSession) {
         router.push(redirectUrl);
       } else {
-        setSession(currentSession);
         setLoading(false);
       }
     };
