@@ -1,6 +1,9 @@
 "use client";
 import { createQuiz } from "@/app/lib/actions";
+import { useRouter } from "next/navigation";
+
 export default function Home() {
+  const router = useRouter();
   const quiz = {
     quizName: "General Knowledge Quiz",
     creatorName: "John Doe",
@@ -41,7 +44,14 @@ export default function Home() {
       <button
         className="p-2 px-4 bg-blue-500 rounded-lg"
         onClick={() => {
-          createQuiz(quiz.quizName, quiz.creatorName, quiz.startTime, quiz.endTime, quiz.questions);
+          createQuiz(
+            quiz.quizName,
+            quiz.creatorName,
+            quiz.startTime,
+            quiz.endTime,
+            quiz.questions
+          );
+          router.push("/quiz")
         }}
       >
         Add Quiz
