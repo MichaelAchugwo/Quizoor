@@ -1,7 +1,7 @@
 "use client";
 import { Suspense, useEffect, useState } from "react";
 import Loader from "../../extras/Loader";
-import { getQuiz, connectToDB } from "@/app/lib/actions";
+import { getQuiz } from "@/app/lib/actions";
 
 type Question = {
   question: string;
