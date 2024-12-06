@@ -10,7 +10,7 @@ import { useRouter } from "next/navigation";
 import type { Session } from "../layout";
 import { CircularProgress } from "@mui/material";
 
-export default function Navbar({ session }: { session: Session }) {
+export default function Navbar() {
   const [navToggle, toggleNavBar] = useState(true);
   const [loading, setLoading] = useState(false);
   const router = useRouter();

@@ -117,7 +117,7 @@ function Home() {
             <p>No quizzes available currently.</p>
           ) : (
             quizzes.map((quiz) => (
-              <li className="mt-4">
+              <li key={quiz.quizName} className="mt-4">
                 <h2 className="text-lg font-semibold">{quiz.quizName}</h2>
                 <p>Created by: {quiz.creatorName}</p>
                 <p>

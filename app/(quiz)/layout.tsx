@@ -34,7 +34,7 @@ export default function RootLayout({
       }
     };
     sessionCheck();
-  }, []);
+  }, [redirectUrl, router]);
 
   if(loading){
     return(
@@ -45,7 +45,7 @@ export default function RootLayout({
   }
   return (
     <>
-      <Navbar session={session} /> {/* Pass session directly if needed */}
+      <Navbar />
       <div className="overflow-y-scroll px-5 max-h-[85dvh] no-scrollbar">
         {children}
       </div>
