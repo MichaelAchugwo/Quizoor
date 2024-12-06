@@ -67,6 +67,7 @@ export async function getQuiz(id: string): Promise<Quiz | null> {
 
 export async function getAllQuizzes(): Promise<Quiz[] | null> {
   try {
+    await connectToDB();
     const quiz = await Quiz.find().lean();
     if (!quiz) {
       return null;
