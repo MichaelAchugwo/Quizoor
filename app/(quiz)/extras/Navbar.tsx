@@ -24,7 +24,7 @@ export default function Navbar() {
         <Link href="/" className="inline-block h-[35px] w-[140px] relative">
           <Image
             alt="Quizoor Logo"
-            src="/quizoorLogo.png"
+            src="/quizoorLogoDark.png"
             sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
             fill
           />

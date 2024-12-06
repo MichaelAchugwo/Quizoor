@@ -4,6 +4,7 @@ import { useRouter, useSearchParams, usePathname } from "next/navigation";
 import type { User } from "next-auth";
 import { checkSession, getAllQuizzes } from "@/app/lib/actions";
 import Loader from "../extras/Loader";
+import Link from "next/link";
 
 type Question = {
   question: string;
@@ -12,6 +13,7 @@ type Question = {
 };
 
 type Quiz = {
+  _id: string;
   quizName: string;
   creatorName: string;
   startTime: string;
@@ -47,7 +49,7 @@ function Home() {
     const fetchQuizzes = async () => {
       try {
         const data = await getAllQuizzes();
-        console.log(data)
+        console.log(data);
         setQuizzes(data);
       } catch (error) {
         console.error("Failed to fetch quizzes", error);
@@ -110,20 +112,21 @@ function Home() {
         </button>
       </form>
       <div className="mt-9">
-        <ul>
+        <ul className="px-7">
           {quizzes === null ? (
             <Loader smaller={true} />
           ) : quizzes.length === 0 ? (
             <p>No quizzes available currently.</p>
           ) : (
             quizzes.map((quiz) => (
-              <li key={quiz.quizName} className="mt-4">
-                <h2 className="text-lg font-semibold">{quiz.quizName}</h2>
+              <li key={quiz._id} className="my-4 md:flex md:place-items-center md:justify-between">
+                <h2 className="text-lg font-semibold mb-2 md:mb-0">{quiz.quizName}</h2>
                 <p>Created by: {quiz.creatorName}</p>
-                <p>
+                <p className="mb-4 md:mb-0">
                   Start: {new Date(quiz.startTime).toLocaleString()} | End:{" "}
                   {new Date(quiz.endTime).toLocaleString()}
                 </p>
+                <Link href={`/quiz/${quiz._id}`} className="bg-[#066C5D] text-white p-2 px-4 rounded-lg">Take Quiz</Link>
               </li>
             ))
           )}

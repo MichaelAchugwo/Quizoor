@@ -39,6 +39,7 @@ type Question = {
 };
 
 export type Quiz = {
+  _id: string;
   quizName: string;
   creatorName: string;
   startTime: string;
