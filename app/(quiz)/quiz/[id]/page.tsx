@@ -26,7 +26,6 @@ export default function Page({ params }: { params: { id: string } }) {
   useEffect(() => {
     const fetchQuiz = async () => {
       try {
-        await connectToDB();
         const fetchedQuiz = await getQuiz(id);
         console.log(fetchedQuiz);
         setQuiz(fetchedQuiz);
