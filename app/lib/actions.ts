@@ -49,6 +49,7 @@ export type Quiz = {
 
 export async function getQuiz(id: string): Promise<Quiz | null> {
   try {
+    await connectToDB();
     if (mongoose.connection.readyState === 0) {
       await mongoose.connect(uri);
     }
