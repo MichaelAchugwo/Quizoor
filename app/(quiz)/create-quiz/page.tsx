@@ -154,6 +154,7 @@ export default function Home() {
               id="quizName"
               className="p-2 rounded-md border-2 border-gray-300 w-full"
               placeholder="Enter the name for your quiz"
+              required={true}
             />
           </div>
           <div className="flex flex-col gap-y-3">
@@ -164,6 +165,7 @@ export default function Home() {
               type="datetime-local"
               id="startTime"
               className="p-2 rounded-md border-2 border-gray-300 w-full"
+              required={true}
             />
           </div>
           <div className="flex flex-col gap-y-3">
@@ -174,6 +176,7 @@ export default function Home() {
               type="datetime-local"
               id="endTime"
               className="p-2 rounded-md border-2 border-gray-300 w-full"
+              required={true}
             />
           </div>
           <div className="flex flex-col gap-y-3">
@@ -185,6 +188,7 @@ export default function Home() {
               id="questionNumber"
               className="p-2 rounded-md border-2 border-gray-300 w-full"
               defaultValue={1}
+              required={true}
             />
           </div>
           <button
@@ -214,6 +218,7 @@ export default function Home() {
                 value={q.question}
                 onChange={(e) => updateQuestion(questionIndex, e.target.value)}
                 placeholder={`Enter question ${questionIndex + 1}`}
+                required={true}
               />
               <div className="pl-4">
                 {q.options.map((option, optionIndex) => (
@@ -226,6 +231,7 @@ export default function Home() {
                         updateOption(questionIndex, optionIndex, e.target.value)
                       }
                       placeholder={`Option ${optionIndex + 1}`}
+                      required={true}
                     />
                   </div>
                 ))}
@@ -264,10 +270,9 @@ export default function Home() {
               </div>
             </div>
           ))}
-
           <div className="flex gap-3 w-full">
             <button
-              type="button"
+              type="submit"
               className="flex place-items-center justify-center p-2 px-4 mt-3 w-1/2 bg-[#066C5D] hover:opacity-75 text-white font-semibold rounded-lg"
               onClick={createNewQuiz}
               disabled={loading}
