@@ -7,11 +7,6 @@ import CheckIcon from "@mui/icons-material/Check";
 import { ArrowBackIos } from "@mui/icons-material";
 import { Session } from "../layout";
 
-type Question = {
-  question: string;
-  options: string[];
-};
-
 export default function Home() {
   const router = useRouter();
   const [currentSection, setCurrentSection] = useState<"details" | "questions">(
@@ -129,9 +124,13 @@ export default function Home() {
       );
       alert("Quiz created successfully!");
       router.push("/quiz");
-    } catch (error: any) {
-      console.error("Error creating quiz:", error);
-      alert(error.message || "Failed to create quiz. Please try again.");
+    } catch (error) {
+      if (error instanceof Error) {
+        console.error("Error creating quiz:", error);
+        alert(error.message || "Failed to create quiz. Please try again.");
+      } else {
+        console.error("Unexpected error:", error);
+      }
     } finally {
       setLoading(false);
     }
