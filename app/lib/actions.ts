@@ -65,13 +65,10 @@ export async function getQuiz(id: string): Promise<Quiz | null> {
   }
 }
 
-export async function getAllQuizzes(): Promise<Quiz[] | null> {
+export async function getAllQuizzes() {
   try {
     await connectToDB();
-    const quiz = await Quiz.find().lean();
-    if (!quiz) {
-      return null;
-    }
+    const quiz = await Quiz.find({}).lean();
     return quiz as unknown as Quiz[];
   } catch (err) {
     console.error("Error fetching quizzes");
@@ -87,6 +84,7 @@ export async function createQuiz(
   questionList: Question[]
 ) {
   try {
+    await connectToDB();
     const newQuiz = new Quiz({
       quizName: name,
       creatorName: creator,

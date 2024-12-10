@@ -38,7 +38,7 @@ function Home() {
 
   const [user, setUser] = useState<User | null>(null);
   const [query, setQuery] = useState(() => searchParams.get("search") || "");
-  const [quizzes, setQuizzes] = useState<Quiz[] | null>(null);
+  const [quizzes, setQuizzes] = useState<Quiz[]>([]);
 
   useEffect(() => {
     const fetchUser = async () => {
@@ -119,7 +119,7 @@ function Home() {
             <p>No quizzes available currently.</p>
           ) : (
             quizzes.map((quiz) => (
-              <li key={quiz._id} className="my-4 md:flex md:place-items-center md:justify-between">
+              <li key={quiz._id.toString()} className="my-4 md:flex md:place-items-center md:justify-between">
                 <h2 className="text-lg font-semibold mb-2 md:mb-0">{quiz.quizName}</h2>
                 <p>Created by: {quiz.creatorName}</p>
                 <p className="mb-4 md:mb-0">

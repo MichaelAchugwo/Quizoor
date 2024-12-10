@@ -1,61 +1,296 @@
 "use client";
-import { createQuiz } from "@/app/lib/actions";
+import { checkSession, createQuiz } from "@/app/lib/actions";
 import { useRouter } from "next/navigation";
+import { useRef, useState } from "react";
+import AddIcon from "@mui/icons-material/Add";
+import CheckIcon from "@mui/icons-material/Check";
+import { ArrowBackIos } from "@mui/icons-material";
+import { Session } from "../layout";
+
+type Question = {
+  question: string;
+  options: string[];
+};
 
 export default function Home() {
   const router = useRouter();
-  const quiz = {
-    quizName: "General Knowledge Quiz",
-    creatorName: "John Doe",
-    startTime: "2024-11-26T08:00:00Z",
-    endTime: "2024-11-26T09:00:00Z",
-    questions: [
-      {
-        question: "What is the capital of France?",
-        options: ["Berlin", "Madrid", "Paris", "Rome"],
-        correctOption: "Paris",
-      },
-      {
-        question: "Who wrote 'Hamlet'?",
-        options: [
-          "Charles Dickens",
-          "William Shakespeare",
-          "Mark Twain",
-          "Leo Tolstoy",
-        ],
-        correctOption: "William Shakespeare",
-      },
-      {
-        question: "What is the chemical symbol for water?",
-        options: ["O2", "CO2", "H2O", "NaCl"],
-        correctOption: "H2O",
-      },
-      {
-        question: "Which planet is known as the Red Planet?",
-        options: ["Earth", "Mars", "Jupiter", "Saturn"],
-        correctOption: "Mars",
-      },
-    ],
-    results: [],
+  const [currentSection, setCurrentSection] = useState<"details" | "questions">(
+    "details"
+  );
+  const [questions, setQuestions] = useState([
+    {
+      question: "",
+      options: [""],
+      correctOption: "",
+    },
+  ]);
+
+  const [loading, setLoading] = useState(false);
+  const detailsRef = useRef<HTMLDivElement>(null);
+  const questionsRef = useRef<HTMLDivElement>(null);
+
+  const goToDetails = (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.preventDefault();
+    setCurrentSection("details");
+    detailsRef.current?.scrollIntoView({ behavior: "smooth" });
   };
+
+  const goToQuestions = (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.preventDefault();
+    const questionNumber = document.getElementById(
+      "questionNumber"
+    ) as HTMLInputElement;
+    const count = Number(questionNumber.value);
+
+    setQuestions((prev) => {
+      // If the current questions array has enough questions, return it as is.
+      if (prev.length >= count) return prev;
+
+      // Otherwise, add new questions to reach the desired count.
+      const additionalQuestions = Array(count - prev.length).fill({
+        question: "",
+        options: [""],
+        correctOption: "",
+      });
+      return [...prev, ...additionalQuestions];
+    });
+
+    setCurrentSection("questions");
+    questionsRef.current?.scrollIntoView({ behavior: "smooth" });
+  };
+
+  const updateQuestion = (index: number, value: string) => {
+    setQuestions((prev) =>
+      prev.map((q, i) => (i === index ? { ...q, question: value } : q))
+    );
+  };
+
+  const addOption = (questionIndex: number) => {
+    setQuestions((prev) =>
+      prev.map((q, i) =>
+        i === questionIndex ? { ...q, options: [...q.options, ""] } : q
+      )
+    );
+  };
+
+  const updateOption = (
+    questionIndex: number,
+    optionIndex: number,
+    value: string
+  ) => {
+    setQuestions((prev) =>
+      prev.map((q, i) =>
+        i === questionIndex
+          ? {
+              ...q,
+              options: q.options.map((opt, j) =>
+                j === optionIndex ? value : opt
+              ),
+            }
+          : q
+      )
+    );
+  };
+
+  const createNewQuiz = async () => {
+    setLoading(true);
+
+    try {
+      const currentSession = (await checkSession("Done")) as Session;
+      const creatorName = currentSession?.user?.name as string;
+
+      // Fetch input values
+      const name = document.getElementById("quizName") as HTMLInputElement;
+      const startTime = document.getElementById(
+        "startTime"
+      ) as HTMLInputElement;
+      const endTime = document.getElementById("endTime") as HTMLInputElement;
+
+      // Format the questions for the quiz
+      const formattedQuestions = questions.map((q) => {
+        if (!q.correctOption || !q.options.includes(q.correctOption)) {
+          throw new Error(
+            `Question "${q.question}" has an invalid correct option.`
+          );
+        }
+
+        return {
+          question: q.question.trim(),
+          options: q.options.map((opt) => opt.trim()).filter(Boolean), // Ensure no empty options
+          correctOption: q.correctOption.trim(),
+        };
+      });
+      await createQuiz(
+        name.value.trim(),
+        creatorName,
+        startTime.value,
+        endTime.value,
+        formattedQuestions
+      );
+      alert("Quiz created successfully!");
+      router.push("/quiz");
+    } catch (error: any) {
+      console.error("Error creating quiz:", error);
+      alert(error.message || "Failed to create quiz. Please try again.");
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return (
     <>
-      <h1>Create New Quiz</h1>
-      <button
-        className="p-2 px-4 bg-blue-500 rounded-lg"
-        onClick={() => {
-          createQuiz(
-            quiz.quizName,
-            quiz.creatorName,
-            quiz.startTime,
-            quiz.endTime,
-            quiz.questions
-          );
-          router.push("/quiz")
-        }}
+      <h1 className="text-gray-500 text-xl text-center mt-4 mb-2">
+        Create New Quiz
+      </h1>
+      <div
+        className={`${
+          currentSection === "details" ? "flex flex-col" : "hidden"
+        } justify-center place-items-center`}
+        ref={detailsRef}
       >
-        Add Quiz
-      </button>
+        <h1 className="text-2xl text-center font-bold">Quiz Details</h1>
+        <form className="flex flex-col gap-y-4 my-3 w-full px-3 md:px-0 md:w-1/2">
+          <div className="flex flex-col gap-y-3">
+            <label htmlFor="quizName" className="font-semibold">
+              Quiz Name
+            </label>
+            <input
+              type="text"
+              id="quizName"
+              className="p-2 rounded-md border-2 border-gray-300 w-full"
+              placeholder="Enter the name for your quiz"
+            />
+          </div>
+          <div className="flex flex-col gap-y-3">
+            <label htmlFor="startTime" className="font-semibold">
+              Start Time
+            </label>
+            <input
+              type="datetime-local"
+              id="startTime"
+              className="p-2 rounded-md border-2 border-gray-300 w-full"
+            />
+          </div>
+          <div className="flex flex-col gap-y-3">
+            <label htmlFor="endTime" className="font-semibold">
+              End Time
+            </label>
+            <input
+              type="datetime-local"
+              id="endTime"
+              className="p-2 rounded-md border-2 border-gray-300 w-full"
+            />
+          </div>
+          <div className="flex flex-col gap-y-3">
+            <label htmlFor="questionNumber" className="font-semibold">
+              Number of Questions
+            </label>
+            <input
+              type="number"
+              id="questionNumber"
+              className="p-2 rounded-md border-2 border-gray-300 w-full"
+              defaultValue={1}
+            />
+          </div>
+          <button
+            className="flex place-items-center justify-center p-2 px-4 mt-3 bg-[#066C5D] hover:opacity-75 text-white font-semibold rounded-lg"
+            onClick={goToQuestions}
+          >
+            <AddIcon /> Add Questions
+          </button>
+        </form>
+      </div>
+      <div
+        className={`${
+          currentSection === "questions" ? "flex flex-col" : "hidden"
+        } justify-center place-items-center`}
+        ref={questionsRef}
+      >
+        <h1 className="text-2xl text-center font-bold">Add Questions</h1>
+        <form className="flex flex-col gap-y-4 my-3 w-full px-3 md:px-0 md:w-1/2">
+          {questions.map((q, questionIndex) => (
+            <div key={questionIndex} className="flex flex-col gap-y-3">
+              <label className="font-semibold">
+                Question {questionIndex + 1}
+              </label>
+              <input
+                type="text"
+                className="p-2 rounded-md border-2 border-gray-300 w-full"
+                value={q.question}
+                onChange={(e) => updateQuestion(questionIndex, e.target.value)}
+                placeholder={`Enter question ${questionIndex + 1}`}
+              />
+              <div className="pl-4">
+                {q.options.map((option, optionIndex) => (
+                  <div key={optionIndex} className="flex gap-3 mb-2">
+                    <input
+                      type="text"
+                      className="p-2 rounded-md border-2 border-gray-300 w-full"
+                      value={option}
+                      onChange={(e) =>
+                        updateOption(questionIndex, optionIndex, e.target.value)
+                      }
+                      placeholder={`Option ${optionIndex + 1}`}
+                    />
+                  </div>
+                ))}
+                <button
+                  type="button"
+                  className="text-blue-500"
+                  onClick={() => addOption(questionIndex)}
+                >
+                  + Add Option
+                </button>
+                <label className="font-semibold mt-3 block">
+                  Correct Option
+                </label>
+                <select
+                  className="p-2 rounded-md border-2 border-gray-300 w-full"
+                  value={q.correctOption}
+                  onChange={(e) =>
+                    setQuestions((prev) =>
+                      prev.map((question, i) =>
+                        i === questionIndex
+                          ? { ...question, correctOption: e.target.value }
+                          : question
+                      )
+                    )
+                  }
+                >
+                  <option value="" disabled>
+                    Select the correct option
+                  </option>
+                  {q.options.map((option, optionIndex) => (
+                    <option key={optionIndex} value={option}>
+                      {option}
+                    </option>
+                  ))}
+                </select>
+              </div>
+            </div>
+          ))}
+
+          <div className="flex gap-3 w-full">
+            <button
+              type="button"
+              className="flex place-items-center justify-center p-2 px-4 mt-3 w-1/2 bg-[#066C5D] hover:opacity-75 text-white font-semibold rounded-lg"
+              onClick={createNewQuiz}
+              disabled={loading}
+            >
+              {loading ? "Creating..." : "Create Quiz"}
+              <CheckIcon className="ml-2" />
+            </button>
+            <button
+              type="button"
+              className="flex place-items-center justify-center p-2 px-4 mt-3 w-1/2 bg-gray-200 hover:opacity-75 text-black font-semibold rounded-lg"
+              onClick={goToDetails}
+            >
+              <ArrowBackIos />
+              Go Back
+            </button>
+          </div>
+        </form>
+      </div>
     </>
   );
 }
