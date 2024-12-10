@@ -93,25 +93,21 @@ export default function Home() {
     try {
       const currentSession = (await checkSession("Done")) as Session;
       const creatorName = currentSession?.user?.name as string;
-
-      // Fetch input values
       const name = document.getElementById("quizName") as HTMLInputElement;
       const startTime = document.getElementById(
         "startTime"
       ) as HTMLInputElement;
       const endTime = document.getElementById("endTime") as HTMLInputElement;
 
-      // Format the questions for the quiz
       const formattedQuestions = questions.map((q) => {
         if (!q.correctOption || !q.options.includes(q.correctOption)) {
           throw new Error(
             `Question "${q.question}" has an invalid correct option.`
           );
         }
-
         return {
           question: q.question.trim(),
-          options: q.options.map((opt) => opt.trim()).filter(Boolean), // Ensure no empty options
+          options: q.options.map((opt) => opt.trim()).filter(Boolean),
           correctOption: q.correctOption.trim(),
         };
       });
@@ -205,8 +201,8 @@ export default function Home() {
         } justify-center place-items-center`}
         ref={questionsRef}
       >
-        <h1 className="text-2xl text-center font-bold">Add Questions</h1>
-        <form className="flex flex-col gap-y-4 my-3 w-full px-3 md:px-0 md:w-1/2">
+        <h1 className="text-2xl text-center font-bold mb-3">Add Questions</h1>
+        <form className="flex flex-col gap-y-7 my-3 w-full px-3 md:px-0 md:w-1/2">
           {questions.map((q, questionIndex) => (
             <div key={questionIndex} className="flex flex-col gap-y-3">
               <label className="font-semibold">
