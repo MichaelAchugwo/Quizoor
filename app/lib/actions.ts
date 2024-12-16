@@ -103,7 +103,7 @@ export async function createQuiz(
   }
 }
 
-export async function addResult(quizId: string, result: Object) {
+export async function addResult(quizId: string, result: object) {
   await connectToDB();
   try {
     const updatedQuiz = await Quiz.findByIdAndUpdate(
