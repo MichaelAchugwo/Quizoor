@@ -44,6 +44,7 @@ export type Quiz = {
   creatorName: string;
   startTime: string;
   endTime: string;
+  identification_name: string;
   questions: Question[];
 };
 
@@ -81,6 +82,7 @@ export async function createQuiz(
   creator: string,
   beginTime: string,
   finishTime: string,
+  identificationType: string,
   questionList: Question[]
 ) {
   try {
@@ -90,12 +92,33 @@ export async function createQuiz(
       creatorName: creator,
       startTime: beginTime,
       endTime: finishTime,
+      identification_name: identificationType,
       questions: questionList,
     });
     await newQuiz.save();
     return;
   } catch (err) {
     console.error("Error fetching quizzes");
+    throw err;
+  }
+}
+
+export async function addResult(quizId: string, result: Object) {
+  await connectToDB();
+  try {
+    const updatedQuiz = await Quiz.findByIdAndUpdate(
+      quizId,
+      { $push: { results: result } },
+      { new: true }
+    ).lean();
+
+    if (!updatedQuiz) {
+      throw new Error("Quiz not found");
+    }
+
+    return updatedQuiz;
+  } catch (err) {
+    console.error("Error updating quiz results:", err);
     throw err;
   }
 }

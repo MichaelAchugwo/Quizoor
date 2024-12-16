@@ -16,6 +16,7 @@ export type Quiz = {
   creatorName: string;
   startTime: Date;
   endTime: Date;
+  identification_name: string;
   questions: Question[];
   results: Result[];
 };

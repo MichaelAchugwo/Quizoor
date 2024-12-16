@@ -94,6 +94,7 @@ export default function Home() {
       const currentSession = (await checkSession("Done")) as Session;
       const creatorName = currentSession?.user?.name as string;
       const name = document.getElementById("quizName") as HTMLInputElement;
+      const identificationType = document.getElementById("identificationType") as HTMLInputElement;
       const startTime = document.getElementById(
         "startTime"
       ) as HTMLInputElement;
@@ -116,6 +117,7 @@ export default function Home() {
         creatorName,
         startTime.value,
         endTime.value,
+        identificationType.value,
         formattedQuestions
       );
       alert("Quiz created successfully!");
@@ -154,6 +156,18 @@ export default function Home() {
               id="quizName"
               className="p-2 rounded-md border-2 border-gray-300 w-full"
               placeholder="Enter the name for your quiz"
+              required={true}
+            />
+          </div>
+          <div className="flex flex-col gap-y-3">
+            <label htmlFor="identificationType" className="font-semibold">
+              Identification Type
+            </label>
+            <input
+              type="text"
+              id="identificationType"
+              className="p-2 rounded-md border-2 border-gray-300 w-full"
+              placeholder="Registration Number or Username e.t.c"
               required={true}
             />
           </div>

@@ -18,6 +18,7 @@ type Quiz = {
   creatorName: string;
   startTime: string;
   endTime: string;
+  identification_name: string;
   questions: Question[];
 };
 
