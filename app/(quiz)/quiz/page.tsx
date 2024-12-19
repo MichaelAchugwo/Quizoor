@@ -34,8 +34,12 @@ function Home() {
   const fetchQuizzes = async () => {
     try {
       const data = await getAllQuizzes();
-      setQuizzes(data);
-      setFilteredQuizzes(data);
+      const sortedQuizzes = data.sort(
+        (a, b) =>
+          new Date(a.startTime).getTime() - new Date(b.startTime).getTime()
+      );
+      setQuizzes(sortedQuizzes);
+      setFilteredQuizzes(sortedQuizzes);
     } catch (error) {
       console.error("Failed to fetch quizzes", error);
       setQuizzes([]);
