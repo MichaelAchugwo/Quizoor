@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "FAQ - Quizoor",
+  title: "FAQ",
   description: "All our frequently asked questions can be found here",
 };
 

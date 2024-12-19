@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "About - Quizoor",
+  title: "About",
   description: "Quizoor is an intuitive platform designed to make quiz creation adn learning accessible, interactive, and enjoyable.",
 };
 
