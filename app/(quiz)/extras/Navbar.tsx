@@ -20,7 +20,7 @@ export default function Navbar() {
     <header
       className={`p-5 px-[50px] md:flex md:justify-between md:place-items-center bg-white shadow-sm sticky top-0 w-screen z-[10000]`}
     >
-      <div className="flex md:inline-block justify-between">
+      <div className="flex md:inline-block justify-between place-items-center">
         <Link href="/" className="inline-block h-[35px] w-[140px] relative">
           <Image
             alt="Quizoor Logo"

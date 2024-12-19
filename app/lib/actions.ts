@@ -45,6 +45,7 @@ export type Quiz = {
   startTime: string;
   endTime: string;
   identification_name: string;
+  results: [];
   questions: Question[];
 };
 
@@ -122,3 +123,33 @@ export async function addResult(quizId: string, result: object) {
     throw err;
   }
 }
+
+export async function checkStudentIP(
+  quizId: string,
+  ipAddress: string
+): Promise<boolean | null> {
+  try {
+    await connectToDB(); // Ensure the database connection is established
+
+    const result = await Quiz.findOne(
+      {
+        _id: quizId,
+        "results.ipAddress": ipAddress,
+      },
+      {
+        "results.$": 1,
+      }
+    ).lean();
+
+    console.log(result); // Log the result for debugging
+
+    if (result === null) {
+      return false; // No result found, IP address is not used
+    }
+    return true; // IP address is found
+  } catch (err) {
+    console.error("Error checking IP address:", err);
+    throw err;
+  }
+}
+

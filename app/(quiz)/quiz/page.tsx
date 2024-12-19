@@ -1,10 +1,11 @@
 "use client";
-import { useEffect, useState, useRef } from "react";
-import { useRouter, useSearchParams, usePathname } from "next/navigation";
+import { useEffect, useState } from "react";
 import type { User } from "next-auth";
 import { checkSession, getAllQuizzes } from "@/app/lib/actions";
 import Loader from "../extras/Loader";
 import Link from "next/link";
+import PersonIcon from "@mui/icons-material/Person";
+import EventAvailableIcon from "@mui/icons-material/EventAvailable";
 
 type Question = {
   question: string;
@@ -22,24 +23,27 @@ type Quiz = {
   questions: Question[];
 };
 
-function useDebouncedCallback(callback: (term: string) => void, delay: number) {
-  const debounceTimer = useRef<NodeJS.Timeout | null>(null);
-  return (term: string) => {
-    if (debounceTimer.current) clearTimeout(debounceTimer.current);
-    debounceTimer.current = setTimeout(() => {
-      callback(term);
-    }, delay);
-  };
-}
-
 function Home() {
-  const router = useRouter();
-  const searchParams = useSearchParams();
-  const pathname = usePathname();
-
   const [user, setUser] = useState<User | null>(null);
-  const [query, setQuery] = useState(() => searchParams.get("search") || "");
+  const [query, setQuery] = useState("");
   const [quizzes, setQuizzes] = useState<Quiz[]>([]);
+  const [filteredQuizzes, setFilteredQuizzes] = useState<Quiz[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [showReset, setShowReset] = useState(false);
+
+  const fetchQuizzes = async () => {
+    try {
+      const data = await getAllQuizzes();
+      setQuizzes(data);
+      setFilteredQuizzes(data);
+    } catch (error) {
+      console.error("Failed to fetch quizzes", error);
+      setQuizzes([]);
+      setFilteredQuizzes([]);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   useEffect(() => {
     const fetchUser = async () => {
@@ -47,34 +51,57 @@ function Home() {
       setUser(userDetails?.user || null);
     };
 
-    const fetchQuizzes = async () => {
-      try {
-        const data = await getAllQuizzes();
-        console.log(data);
-        setQuizzes(data);
-      } catch (error) {
-        console.error("Failed to fetch quizzes", error);
-        setQuizzes([]); // Set empty array on failure
-      }
-    };
-
     fetchUser();
     fetchQuizzes();
   }, []);
 
-  const changeSearchParam = useDebouncedCallback((term: string) => {
-    const params = new URLSearchParams(searchParams.toString());
-    if (term) {
-      params.set("search", term);
-    } else {
-      params.delete("search");
-    }
-    router.replace(`${pathname}?${params.toString()}`);
-  }, 300);
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setFilteredQuizzes((prev) => [...prev]); // Trigger re-render for timer updates
+    }, 60000); // Update every minute
+
+    return () => clearInterval(interval); // Cleanup interval on unmount
+  }, []);
 
   const handleSearch = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    router.push(`/quiz?search=${query}`);
+    const filtered = quizzes.filter((quiz) =>
+      quiz.quizName.toLowerCase().includes(query.toLowerCase())
+    );
+    setFilteredQuizzes(filtered);
+    setShowReset(true);
+  };
+
+  const resetQuizPage = async () => {
+    await fetchQuizzes();
+    setQuery("");
+    setShowReset(false);
+  };
+
+  const formatTimeRemaining = (startTime: string, endTime: string): string => {
+    const now = new Date();
+    const start = new Date(startTime);
+    const end = new Date(endTime);
+
+    if (now < start) {
+      const diff = start.getTime() - now.getTime();
+      return formatTime(diff, "starts in");
+    } else if (now < end) {
+      const diff = end.getTime() - now.getTime();
+      return formatTime(diff, "ends in");
+    } else {
+      return "Event ended";
+    }
+  };
+
+  const formatTime = (diff: number, label: string): string => {
+    const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+    const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+    const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+
+    if (days > 0) return `${label}: ${days} day${days > 1 ? "s" : ""}`;
+    if (hours > 0) return `${label}: ${hours} hour${hours > 1 ? "s" : ""}`;
+    return `${label}: ${minutes} minute${minutes > 1 ? "s" : ""}`;
   };
 
   return (
@@ -98,10 +125,7 @@ function Home() {
           name="query"
           id="searchQuery"
           value={query}
-          onChange={(e) => {
-            setQuery(e.target.value);
-            changeSearchParam(e.target.value);
-          }}
+          onChange={(e) => setQuery(e.target.value)}
           placeholder="Quiz ID"
           className="border-b-2 border-gray-400 rounded-md px-4 py-2 text-black"
         />
@@ -111,27 +135,60 @@ function Home() {
         >
           Find Quiz
         </button>
+        {showReset && (
+          <button
+            type="button"
+            onClick={resetQuizPage}
+            className="bg-gray-400 text-white px-4 py-2 rounded-md hover:bg-gray-300 ml-4"
+          >
+            Reset
+          </button>
+        )}
       </form>
+
       <div className="mt-9">
-        <ul className="px-7">
-          {quizzes === null ? (
-            <Loader smaller={true} />
-          ) : quizzes.length === 0 ? (
-            <p>No quizzes available currently.</p>
-          ) : (
-            quizzes.map((quiz) => (
-              <li key={quiz._id.toString()} className="my-4 md:flex md:place-items-center md:justify-between">
-                <h2 className="text-lg font-semibold mb-2 md:mb-0">{quiz.quizName}</h2>
-                <p>Created by: {quiz.creatorName}</p>
-                <p className="mb-4 md:mb-0">
-                  Start: {new Date(quiz.startTime).toLocaleString()} | End:{" "}
-                  {new Date(quiz.endTime).toLocaleString()}
-                </p>
-                <Link href={`/quiz/${quiz._id}`} className="bg-[#066C5D] text-white p-2 px-4 rounded-lg">Take Quiz</Link>
-              </li>
-            ))
-          )}
-        </ul>
+        {loading ? (
+          <Loader smaller={true} />
+        ) : (
+          <ul className="px-7">
+            {filteredQuizzes.length === 0 ? (
+              <p>No quizzes found.</p>
+            ) : (
+              filteredQuizzes
+                .filter((quiz) => {
+                  const endTime = new Date(quiz.endTime).getTime();
+                  return endTime > new Date().getTime();
+                })
+                .map((quiz) => (
+                  <li
+                    key={quiz._id}
+                    className="my-4 p-6 bg-white rounded-lg shadow-lg border border-gray-200 md:flex md:place-items-center md:justify-between"
+                  >
+                    <div className="mb-4 md:mb-0 md:flex md:place-items-center md:gap-4">
+                      <h2 className="text-lg font-semibold text-gray-800">
+                        {quiz.quizName}
+                      </h2>
+                      <p className="flex place-items-center gap-2 text-gray-600 md:ml-7">
+                        <PersonIcon /> {quiz.creatorName}
+                      </p>
+                      <p className="flex place-items-center gap-2 text-gray-600">
+                        <EventAvailableIcon />{" "}
+                        {formatTimeRemaining(quiz.startTime, quiz.endTime)}
+                      </p>
+                    </div>
+                    <div className="text-right">
+                      <Link
+                        href={`/quiz/${quiz._id}`}
+                        className="inline-block bg-[#066C5D] text-white p-2 px-4 rounded-lg hover:bg-[#066c5de9]"
+                      >
+                        Take Quiz
+                      </Link>
+                    </div>
+                  </li>
+                ))
+            )}
+          </ul>
+        )}
       </div>
     </div>
   );

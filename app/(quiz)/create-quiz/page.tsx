@@ -1,7 +1,7 @@
 "use client";
 import { checkSession, createQuiz } from "@/app/lib/actions";
 import { useRouter } from "next/navigation";
-import { useRef, useState } from "react";
+import { useRef, useState, useEffect } from "react";
 import AddIcon from "@mui/icons-material/Add";
 import CheckIcon from "@mui/icons-material/Check";
 import { ArrowBackIos } from "@mui/icons-material";
@@ -19,10 +19,28 @@ export default function Home() {
       correctOption: "",
     },
   ]);
-
   const [loading, setLoading] = useState(false);
+  const [userName, setUserName] = useState<string | null>(null);
   const detailsRef = useRef<HTMLDivElement>(null);
   const questionsRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const fetchSession = async () => {
+      try {
+        const session = (await checkSession("Done")) as Session;
+        setUserName(session?.user?.name || "Guest");
+      } catch (error) {
+        console.error("Error fetching session:", error);
+      }
+    };
+    const startTimeInput = document.getElementById(
+      "startTime"
+    ) as HTMLInputElement;
+    if (startTimeInput) {
+      startTimeInput.value = new Date().toISOString().slice(0, 16);
+    }
+    fetchSession();
+  }, []);
 
   const goToDetails = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
@@ -38,10 +56,7 @@ export default function Home() {
     const count = Number(questionNumber.value);
 
     setQuestions((prev) => {
-      // If the current questions array has enough questions, return it as is.
       if (prev.length >= count) return prev;
-
-      // Otherwise, add new questions to reach the desired count.
       const additionalQuestions = Array(count - prev.length).fill({
         question: "",
         options: [""],
@@ -94,11 +109,23 @@ export default function Home() {
       const currentSession = (await checkSession("Done")) as Session;
       const creatorName = currentSession?.user?.name as string;
       const name = document.getElementById("quizName") as HTMLInputElement;
-      const identificationType = document.getElementById("identificationType") as HTMLInputElement;
+      const identificationType = document.getElementById(
+        "identificationType"
+      ) as HTMLInputElement;
       const startTime = document.getElementById(
         "startTime"
       ) as HTMLInputElement;
-      const endTime = document.getElementById("endTime") as HTMLInputElement;
+      const quizLength = document.getElementById(
+        "quizLength"
+      ) as HTMLInputElement;
+
+      const startDateTime = new Date(startTime.value);
+      const quizLengthMinutes = Number(quizLength.value);
+
+      // Calculate end time
+      const endDateTime = new Date(
+        startDateTime.getTime() + quizLengthMinutes * 60000
+      );
 
       const formattedQuestions = questions.map((q) => {
         if (!q.correctOption || !q.options.includes(q.correctOption)) {
@@ -112,12 +139,13 @@ export default function Home() {
           correctOption: q.correctOption.trim(),
         };
       });
+
       await createQuiz(
         name.value.trim(),
         creatorName,
-        startTime.value,
-        endTime.value,
-        identificationType.value,
+        startDateTime.toISOString(),
+        endDateTime.toISOString(),
+        identificationType.value.trim(),
         formattedQuestions
       );
       alert("Quiz created successfully!");
@@ -137,7 +165,7 @@ export default function Home() {
   return (
     <>
       <h1 className="text-gray-500 text-xl text-center mt-4 mb-2">
-        Create New Quiz
+      Create New Quiz - {userName ? `${userName}` : "Loading..."}
       </h1>
       <div
         className={`${
@@ -183,13 +211,14 @@ export default function Home() {
             />
           </div>
           <div className="flex flex-col gap-y-3">
-            <label htmlFor="endTime" className="font-semibold">
-              End Time
+            <label htmlFor="quizLength" className="font-semibold">
+              Quiz Length (Minutes)
             </label>
             <input
-              type="datetime-local"
-              id="endTime"
+              type="number"
+              id="quizLength"
               className="p-2 rounded-md border-2 border-gray-300 w-full"
+              placeholder="Enter quiz length in minutes"
               required={true}
             />
           </div>

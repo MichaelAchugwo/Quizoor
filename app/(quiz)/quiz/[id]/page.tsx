@@ -1,10 +1,19 @@
 "use client";
 import { useEffect, useState } from "react";
 import Loader from "../../extras/Loader";
-import { checkSession, getQuiz, addResult } from "@/app/lib/actions";
+import {
+  checkSession,
+  getQuiz,
+  addResult,
+  checkStudentIP,
+} from "@/app/lib/actions";
 import { motion, AnimatePresence } from "framer-motion";
 import { Session } from "../../layout";
 import axios from "axios";
+import { useRouter } from "next/navigation";
+import { CircularProgress } from "@mui/material";
+import Link from "next/link";
+import { formatDistanceToNow } from "date-fns";
 
 type Question = {
   question: string;
@@ -18,6 +27,7 @@ type Quiz = {
   startTime: string;
   endTime: string;
   identification_name: string;
+  results: [];
   questions: Question[];
 };
 
@@ -33,21 +43,81 @@ export default function Page({ params }: { params: { id: string } }) {
   const [score, setScore] = useState<number>(0);
   const [identification, setIdentification] = useState<string>("");
   const [showQuiz, setShowQuiz] = useState<boolean>(false);
+  const [showRedirect, setShowRedirect] = useState<boolean>(false);
+  const [timeRemaining, setTimeRemaining] = useState<string>("");
+  const router = useRouter();
 
   useEffect(() => {
     const fetchQuiz = async () => {
       try {
         const fetchedQuiz = await getQuiz(id);
+  
+        // Handle case where fetchedQuiz is null
+        if (!fetchedQuiz) {
+          setError("Quiz not found or unavailable.");
+          const timer = setTimeout(() => router.push("/quiz"), 2000);
+          return () => clearTimeout(timer);
+        }
+  
+        const now = new Date();
+        const end = new Date(fetchedQuiz.endTime || "");
+  
+        // Check if the quiz time has already ended
+        if (end.getTime() <= now.getTime()) {
+          setError("Quiz time is over.");
+          const timer = setTimeout(() => router.push("/quiz"), 2000);
+          return () => clearTimeout(timer); // Clean up the redirect timer
+        }
+  
         setQuiz(fetchedQuiz);
-        setSelectedOptions(new Array(fetchedQuiz?.questions.length).fill(""));
+        setSelectedOptions(new Array(fetchedQuiz.questions.length).fill(""));
+        setLoading(false);
+  
+        const checkRepetition = async () => {
+          const ipToCheck = await axios
+            .get("https://api.ipify.org?format=json")
+            .then((response) => response.data.ip)
+            .catch((error) => console.log(error));
+          const quizTaken = await checkStudentIP(id, ipToCheck);
+          if (quizTaken === true) {
+            setShowRedirect(true);
+            const timer = setTimeout(() => router.push("/quiz"), 2000);
+            return () => clearTimeout(timer);
+          }
+        };
+  
+        checkRepetition();
+  
+        // Timer Function
+        const updateTimer = () => {
+          const now = new Date();
+          const end = new Date(fetchedQuiz.endTime);
+          const remainingTime = end.getTime() - now.getTime();
+  
+          if (remainingTime <= 0) {
+            setTimeRemaining("Quiz time is over.");
+            const timer = setTimeout(() => router.push("/quiz"), 3000);
+            return () => clearTimeout(timer);
+          } else {
+            const formattedTime = formatDistanceToNow(end);
+            setTimeRemaining(formattedTime);
+          }
+        };
+  
+        updateTimer();
+        const timerInterval = setInterval(updateTimer, 1000);
+  
+        return () => clearInterval(timerInterval);
       } catch (err) {
         setError((err as Error).message);
-      } finally {
         setLoading(false);
       }
     };
+  
     fetchQuiz();
-  }, [id]);
+  }, [id, router]);
+  
+  
 
   useEffect(() => {
     if (quiz) {
@@ -101,9 +171,11 @@ export default function Page({ params }: { params: { id: string } }) {
           [quiz?.identification_name]: identity,
           ipAddress: userIP,
         };
-        console.log("userResult:", userResult);
         setScore(correctAnswers);
-        const updatedQuiz = await addResult(id, userResult) as unknown as Quiz;
+        const updatedQuiz = (await addResult(
+          id,
+          userResult
+        )) as unknown as Quiz;
         setQuiz(updatedQuiz);
         setShowResults(true);
       } catch (err) {
@@ -132,7 +204,41 @@ export default function Page({ params }: { params: { id: string } }) {
     return <p>Error: {error}</p>;
   }
 
+  if (showRedirect) {
+    return (
+      <>
+        <div className="flex min-h-[75dvh] place-items-center justify-center text-center text-xl">
+          <div>
+            <p>You have taken this quiz.</p>
+            <p className="mb-5">Redirecting you to Quiz Page</p>
+            <CircularProgress />
+            <Link
+              href="/quiz"
+              className="bg-[#066C5D] text-white p-2 px-4 rounded-md block mt-5"
+            >
+              Or Click Here
+            </Link>
+          </div>
+        </div>
+      </>
+    );
+  }
+
   if (!showQuiz) {
+    const now = new Date();
+    const start = new Date(quiz?.startTime || "");
+
+    if (now < start) {
+      return (
+        <div className="mt-6 text-center">
+          <h1 className="text-2xl font-bold mb-4">{quiz?.quizName}</h1>
+          <p className="mb-6 text-gray-400">Created by: {quiz?.creatorName}</p>
+          <p className="text-red-500 text-lg mb-4">
+            This quiz has not started yet. Please check back later.
+          </p>
+        </div>
+      );
+    }
     return (
       <div className="mt-6 text-center">
         <h1 className="text-2xl font-bold mb-4">{quiz?.quizName}</h1>
@@ -162,7 +268,7 @@ export default function Page({ params }: { params: { id: string } }) {
 
   if (quiz !== null) {
     return (
-      <div className="mt-6">
+      <div className="relative mt-6">
         <h1 className="text-2xl font-bold text-center mb-4">{quiz.quizName}</h1>
         <p className="text-center mb-6">Created by: {quiz.creatorName}</p>
 
@@ -175,6 +281,9 @@ export default function Page({ params }: { params: { id: string } }) {
           </div>
         ) : (
           <>
+            <div className="text-center md:absolute md:top-4 right-4 p-2 bg-gray-200 rounded-md shadow-md">
+              <p className="text-gray-700">Time Remaining: {timeRemaining}</p>
+            </div>
             <AnimatePresence mode="wait">
               <motion.div
                 key={currentIndex}
