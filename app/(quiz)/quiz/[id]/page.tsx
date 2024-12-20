@@ -52,7 +52,6 @@ export default function Page({ params }: { params: { id: string } }) {
       try {
         const fetchedQuiz = await getQuiz(id);
 
-        // Handle case where fetchedQuiz is null
         if (!fetchedQuiz) {
           setError("Quiz not found or unavailable.");
           const timer = setTimeout(() => router.push("/quiz"), 2000);
@@ -62,11 +61,10 @@ export default function Page({ params }: { params: { id: string } }) {
         const now = new Date();
         const end = new Date(fetchedQuiz.endTime || "");
 
-        // Check if the quiz time has already ended
         if (end.getTime() <= now.getTime()) {
           setError("Quiz time is over.");
           const timer = setTimeout(() => router.push("/quiz"), 2000);
-          return () => clearTimeout(timer); // Clean up the redirect timer
+          return () => clearTimeout(timer);
         }
 
         setQuiz(fetchedQuiz);
@@ -276,12 +274,12 @@ export default function Page({ params }: { params: { id: string } }) {
             <p className="text-4xl font-bold bg-gradient-to-r from-green-400 to-green-800 bg-clip-text text-transparent">
               {score} / {quiz.questions.length}
             </p>
-            <div className="mt-7">
-              <p className="mb-5">Redirecting you to Quiz Page</p>
+            <p className="my-5 text-center">Redirecting you to Quiz Page</p>
+            <div className="flex flex-col md:max-w-[25vw] text-center place-items-center mx-auto">
               <CircularProgress />
               <Link
                 href="/quiz"
-                className="bg-[#066C5D] text-white p-2 px-4 rounded-md mt-5 "
+                className="bg-[#066C5D] text-white p-2 px-4 rounded-md mt-5"
               >
                 Or Click Here
               </Link>

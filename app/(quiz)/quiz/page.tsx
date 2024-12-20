@@ -113,7 +113,6 @@ function Home() {
       <h1 className="text-3xl font-semibold text-[#066C5D] text-center">
         Take a Quiz, {user?.name?.split(" ")[0]}
       </h1>
-
       <form
         onSubmit={handleSearch}
         className="text-center mt-7 md:flex md:gap-4 md:place-items-center md:justify-center"
