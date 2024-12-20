@@ -69,6 +69,7 @@ export default function ResultsPage() {
             <tr>
               <th className="py-2 px-4 border-b">Rank</th>
               <th className="py-2 px-4 border-b">Name</th>
+              <th className="py-2 px-4 border-b">{quiz.identification_name}</th>
               <th className="py-2 px-4 border-b">Score</th>
             </tr>
           </thead>
@@ -78,6 +79,9 @@ export default function ResultsPage() {
                 <td className="py-2 px-4 border-b text-center">{index + 1}</td>
                 <td className="py-2 px-4 border-b text-center">
                   {result.name}
+                </td>
+                <td className="py-2 px-4 border-b text-center">
+                  {result.identification}
                 </td>
                 <td className="py-2 px-4 border-b text-center">
                   {result.score}

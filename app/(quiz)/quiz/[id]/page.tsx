@@ -164,7 +164,7 @@ export default function Page({ params }: { params: { id: string } }) {
           name: studentName,
           email: studentEmail,
           score: correctAnswers,
-          identity: identity,
+          identification: identity,
           ipAddress: userIP,
         };
         console.log(userResult)
@@ -265,12 +265,11 @@ export default function Page({ params }: { params: { id: string } }) {
 
   if (quiz !== null) {
     return (
-      <div className="relative mt-[100px]">
-        <h1 className="text-2xl font-bold text-center mb-4">{quiz.quizName}</h1>
+      <div className="relative">
+        <h1 className="text-2xl font-bold text-center my-4">{quiz.quizName}</h1>
         <p className="text-center mb-6">Created by: {quiz.creatorName}</p>
-
         {showResults ? (
-          <div className="text-center">
+          <div className="text-center mt-[80px]">
             <h2 className="text-xl font-semibold mb-4">Results</h2>
             <p className="text-4xl font-bold bg-gradient-to-r from-green-400 to-green-800 bg-clip-text text-transparent">
               {score} / {quiz.questions.length}
