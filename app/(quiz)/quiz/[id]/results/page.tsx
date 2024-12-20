@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import { getQuiz, Question } from "@/app/lib/actions"; // Assuming this function fetches the quiz data
 import Loader from "@/app/(quiz)/extras/Loader";
 import { usePathname } from "next/navigation";
+import Link from "next/navigation"
 
 type Result = {
   name: string;
@@ -65,7 +66,20 @@ export default function ResultsPage() {
   }
 
   const sortedResults = quiz.results.sort((a, b) => b.score - a.score);
+  const now = new Date();
+  const start = new Date(quiz?.startTime || "");
 
+  if (now < start) {
+    return (
+      <div className="mt-6 text-center">
+        <h1 className="text-2xl font-bold mb-4">{quiz?.quizName}</h1>
+        <p className="mb-6 text-gray-400">Created by: {quiz?.creatorName}</p>
+        <p className="text-red-500 text-lg mb-4">
+          This quiz has not started yet. Please check back later.
+        </p>
+      </div>
+    );
+  }
   return (
     <div className="mt-7">
       <h1 className="text-2xl font-bold text-center mb-6">
