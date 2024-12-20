@@ -164,9 +164,10 @@ export default function Page({ params }: { params: { id: string } }) {
           name: studentName,
           email: studentEmail,
           score: correctAnswers,
-          [quiz?.identification_name]: identity,
+          identity: identity,
           ipAddress: userIP,
         };
+        console.log(userResult)
         setScore(correctAnswers);
         const updatedQuiz = (await addResult(
           id,
@@ -264,7 +265,7 @@ export default function Page({ params }: { params: { id: string } }) {
 
   if (quiz !== null) {
     return (
-      <div className="relative mt-6">
+      <div className="relative mt-[100px]">
         <h1 className="text-2xl font-bold text-center mb-4">{quiz.quizName}</h1>
         <p className="text-center mb-6">Created by: {quiz.creatorName}</p>
 
@@ -274,14 +275,13 @@ export default function Page({ params }: { params: { id: string } }) {
             <p className="text-4xl font-bold bg-gradient-to-r from-green-400 to-green-800 bg-clip-text text-transparent">
               {score} / {quiz.questions.length}
             </p>
-            <p className="my-5 text-center">Redirecting you to Quiz Page</p>
+            <p className="mt-7 text-center">Check out Current Results Here</p>
             <div className="flex flex-col md:max-w-[25vw] text-center place-items-center mx-auto">
-              <CircularProgress />
               <Link
-                href="/quiz"
+                href={`/quiz/${id}/results`}
                 className="bg-[#066C5D] text-white p-2 px-4 rounded-md mt-5"
               >
-                Or Click Here
+                Check Results
               </Link>
             </div>
           </div>

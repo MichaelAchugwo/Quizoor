@@ -32,7 +32,7 @@ export async function connectToDB() {
   }
 }
 
-type Question = {
+export type Question = {
   question: string;
   options: string[];
   correctOption: string;

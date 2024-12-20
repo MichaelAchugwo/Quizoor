@@ -179,12 +179,18 @@ function Home() {
                         {formatTimeRemaining(quiz.startTime, quiz.endTime)}
                       </p>
                     </div>
-                    <div className="text-right">
+                    <div className="text-right md:flex md:gap-4">
                       <Link
                         href={`/quiz/${quiz._id}`}
                         className="inline-block bg-[#066C5D] text-white p-2 px-4 rounded-lg hover:bg-[#066c5de9]"
                       >
                         Take Quiz
+                      </Link>
+                      <Link
+                        href={`/quiz/${quiz._id}/results`}
+                        className="inline-block ml-3 md:ml-0 bg-gray-400 text-white p-2 px-4 rounded-lg hover:bg-gray-300"
+                      >
+                        Results
                       </Link>
                     </div>
                   </li>
