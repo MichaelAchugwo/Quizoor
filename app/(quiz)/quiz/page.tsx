@@ -34,6 +34,7 @@ function Home() {
   const fetchQuizzes = async () => {
     try {
       const data = await getAllQuizzes();
+      console.log(data);
       const sortedQuizzes = data.sort(
         (a, b) =>
           new Date(a.startTime).getTime() - new Date(b.startTime).getTime()
@@ -143,7 +144,7 @@ function Home() {
           <button
             type="button"
             onClick={resetQuizPage}
-            className="bg-gray-400 text-white px-4 py-2 rounded-md hover:bg-gray-300 ml-4"
+            className="bg-gray-400 text-white px-4 py-2 mt-3 md:mt-0 rounded-md hover:bg-gray-300 ml-4"
           >
             Reset
           </button>

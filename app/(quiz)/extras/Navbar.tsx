@@ -109,7 +109,7 @@ export default function Navbar() {
             }}
           >
             <span className="md:hidden mr-2">Logout</span>
-            {loading ? <CircularProgress color="primary" size={20}/> : <LogoutIcon />}
+            {loading ? <CircularProgress className="text-white" size={20}/> : <LogoutIcon />}
           </button>
         </div>
       </div>

@@ -104,7 +104,6 @@ export default function Home() {
 
   const createNewQuiz = async () => {
     setLoading(true);
-
     try {
       const currentSession = (await checkSession("Done")) as Session;
       const creatorName = currentSession?.user?.name as string;

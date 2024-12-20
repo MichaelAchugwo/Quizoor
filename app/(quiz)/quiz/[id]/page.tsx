@@ -51,28 +51,28 @@ export default function Page({ params }: { params: { id: string } }) {
     const fetchQuiz = async () => {
       try {
         const fetchedQuiz = await getQuiz(id);
-  
+
         // Handle case where fetchedQuiz is null
         if (!fetchedQuiz) {
           setError("Quiz not found or unavailable.");
           const timer = setTimeout(() => router.push("/quiz"), 2000);
           return () => clearTimeout(timer);
         }
-  
+
         const now = new Date();
         const end = new Date(fetchedQuiz.endTime || "");
-  
+
         // Check if the quiz time has already ended
         if (end.getTime() <= now.getTime()) {
           setError("Quiz time is over.");
           const timer = setTimeout(() => router.push("/quiz"), 2000);
           return () => clearTimeout(timer); // Clean up the redirect timer
         }
-  
+
         setQuiz(fetchedQuiz);
         setSelectedOptions(new Array(fetchedQuiz.questions.length).fill(""));
         setLoading(false);
-  
+
         const checkRepetition = async () => {
           const ipToCheck = await axios
             .get("https://api.ipify.org?format=json")
@@ -85,15 +85,15 @@ export default function Page({ params }: { params: { id: string } }) {
             return () => clearTimeout(timer);
           }
         };
-  
+
         checkRepetition();
-  
+
         // Timer Function
         const updateTimer = () => {
           const now = new Date();
           const end = new Date(fetchedQuiz.endTime);
           const remainingTime = end.getTime() - now.getTime();
-  
+
           if (remainingTime <= 0) {
             setTimeRemaining("Quiz time is over.");
             const timer = setTimeout(() => router.push("/quiz"), 3000);
@@ -103,21 +103,19 @@ export default function Page({ params }: { params: { id: string } }) {
             setTimeRemaining(formattedTime);
           }
         };
-  
+
         updateTimer();
         const timerInterval = setInterval(updateTimer, 1000);
-  
+
         return () => clearInterval(timerInterval);
       } catch (err) {
         setError((err as Error).message);
         setLoading(false);
       }
     };
-  
+
     fetchQuiz();
   }, [id, router]);
-  
-  
 
   useEffect(() => {
     if (quiz) {
@@ -275,9 +273,19 @@ export default function Page({ params }: { params: { id: string } }) {
         {showResults ? (
           <div className="text-center">
             <h2 className="text-xl font-semibold mb-4">Results</h2>
-            <p>
-              You answered {score} out of {quiz.questions.length} correctly!
+            <p className="text-4xl font-bold bg-gradient-to-r from-green-400 to-green-800 bg-clip-text text-transparent">
+              {score} / {quiz.questions.length}
             </p>
+            <div className="mt-7">
+              <p className="mb-5">Redirecting you to Quiz Page</p>
+              <CircularProgress />
+              <Link
+                href="/quiz"
+                className="bg-[#066C5D] text-white p-2 px-4 rounded-md mt-5 "
+              >
+                Or Click Here
+              </Link>
+            </div>
           </div>
         ) : (
           <>
