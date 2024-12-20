@@ -34,7 +34,6 @@ function Home() {
   const fetchQuizzes = async () => {
     try {
       const data = await getAllQuizzes();
-      console.log(data);
       const sortedQuizzes = data.sort(
         (a, b) =>
           new Date(a.startTime).getTime() - new Date(b.startTime).getTime()
