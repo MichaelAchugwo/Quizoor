@@ -9,7 +9,7 @@ type Result = {
   email: string;
   score: number;
   ipAddress: string;
-  [key: string]: any;
+  identification: string;
 };
 
 type Quiz = {
@@ -43,6 +43,14 @@ export default function ResultsPage() {
     };
     fetchQuiz();
   }, [id]);
+
+  useEffect(() => {
+    if (quiz) {
+      document.title = `${quiz.quizName} Results`;
+    } else {
+      document.title = "Loading Quiz...";
+    }
+  }, [quiz]);
 
   if (loading) {
     return <Loader />;
