@@ -1,5 +1,5 @@
 "use client";
-import { checkSession, createQuiz } from "@/app/lib/actions";
+import { checkSession, createQuiz, getAllQuizzes } from "@/app/lib/actions";
 import { useRouter } from "next/navigation";
 import { useRef, useState, useEffect } from "react";
 import AddIcon from "@mui/icons-material/Add";
@@ -147,8 +147,15 @@ export default function Home() {
         identificationType.value.trim(),
         formattedQuestions
       );
-      alert("Quiz created successfully!");
-      router.push("/quiz");
+      const allQuizzes = await getAllQuizzes();
+      const createdQuiz = allQuizzes.find(
+        (quiz: any) => quiz.quizName === name.value.trim()
+      );
+      if (createdQuiz) {
+        router.push(`/quiz/link/${createdQuiz._id}`);
+      } else {
+        throw new Error("Error creating quiz")
+      }
     } catch (error) {
       if (error instanceof Error) {
         console.error("Error creating quiz:", error);
@@ -164,7 +171,7 @@ export default function Home() {
   return (
     <>
       <h1 className="text-gray-500 text-xl text-center mt-4 mb-2">
-      Create New Quiz - {userName ? `${userName}` : "Loading..."}
+        Create New Quiz - {userName ? `${userName}` : "Loading..."}
       </h1>
       <div
         className={`${
