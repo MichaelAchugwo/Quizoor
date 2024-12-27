@@ -16,7 +16,7 @@ export default function Page({ params }: { params: { id: string } }) {
     } else {
       setQuizId(id);
     }
-  }, [router]);
+  }, [id, router]);
 
   const currentBaseUrl = window.location.origin;
   const baseUrl = currentBaseUrl.includes("localhost:3000")

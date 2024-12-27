@@ -149,7 +149,7 @@ export default function Home() {
       );
       const allQuizzes = await getAllQuizzes();
       const createdQuiz = allQuizzes.find(
-        (quiz: any) => quiz.quizName === name.value.trim()
+        (quiz: unknown) => quiz.quizName === name.value.trim()
       );
       if (createdQuiz) {
         router.push(`/quiz/link/${createdQuiz._id}`);
