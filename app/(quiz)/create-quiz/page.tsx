@@ -1,11 +1,17 @@
 "use client";
-import { checkSession, createQuiz, getAllQuizzes, Quiz } from "@/app/lib/actions";
+import {
+  checkSession,
+  createQuiz,
+  getAllQuizzes,
+  Quiz,
+} from "@/app/lib/actions";
 import { useRouter } from "next/navigation";
 import { useRef, useState, useEffect } from "react";
 import AddIcon from "@mui/icons-material/Add";
 import CheckIcon from "@mui/icons-material/Check";
 import { ArrowBackIos } from "@mui/icons-material";
 import { Session } from "../layout";
+import { Bounce, toast } from "react-toastify";
 
 export default function Home() {
   const router = useRouter();
@@ -154,12 +160,28 @@ export default function Home() {
       if (createdQuiz) {
         router.push(`/quiz/link/${createdQuiz._id}`);
       } else {
-        throw new Error("Error creating quiz")
+        throw new Error("Error creating quiz");
       }
     } catch (error) {
       if (error instanceof Error) {
-        console.error("Error creating quiz:", error);
-        alert(error.message || "Failed to create quiz. Please try again.");
+        console.error(
+          error.message || "Failed to create quiz. Please try again.",
+          error
+        );
+        toast.error(
+          error.message || "Failed to create quiz. Please try again.",
+          {
+            position: "bottom-right",
+            autoClose: 4000,
+            hideProgressBar: false,
+            closeOnClick: false,
+            pauseOnHover: false,
+            draggable: true,
+            progress: undefined,
+            theme: "colored",
+            transition: Bounce,
+          }
+        );
       } else {
         console.error("Unexpected error:", error);
       }

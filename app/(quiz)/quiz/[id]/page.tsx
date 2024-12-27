@@ -14,6 +14,7 @@ import { useRouter } from "next/navigation";
 import { CircularProgress } from "@mui/material";
 import Link from "next/link";
 import { formatDistanceToNow } from "date-fns";
+import { Bounce, toast } from "react-toastify";
 
 type Question = {
   question: string;
@@ -189,7 +190,20 @@ export default function Page({ params }: { params: { id: string } }) {
       setIdentity(identityName.value);
       setShowQuiz(true);
     } else {
-      alert("Please enter your identification name.");
+      toast.error(
+        "Please Enter your identification name.",
+        {
+          position: "bottom-right",
+          autoClose: 4000,
+          hideProgressBar: false,
+          closeOnClick: false,
+          pauseOnHover: false,
+          draggable: true,
+          progress: undefined,
+          theme: "colored",
+          transition: Bounce,
+        }
+      );
     }
   };
 

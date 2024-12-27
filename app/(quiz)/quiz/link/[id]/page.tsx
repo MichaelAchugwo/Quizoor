@@ -3,20 +3,35 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import ArrowBackIosIcon from "@mui/icons-material/ArrowBackIos";
+import { toast, Bounce } from "react-toastify";
 
 export default function Page({ params }: { params: { id: string } }) {
   const router = useRouter();
   const id = params.id;
   const [quizId, setQuizId] = useState<string | null>(null);
+  const [toastDisplayed, setToastDisplayed] = useState(false);
 
   useEffect(() => {
-    if (!id) {
-      alert("Quiz ID not found. Redirecting to home...");
-      router.push("/create-quiz");
+    if (!id && !toastDisplayed) {
+      toast.error("Quiz ID not found. Redirecting to home...", {
+        position: "bottom-right",
+        autoClose: 2000,
+        hideProgressBar: false,
+        closeOnClick: false,
+        pauseOnHover: false,
+        draggable: true,
+        progress: undefined,
+        theme: "colored",
+        transition: Bounce,
+      });
+      setToastDisplayed(true);
+      setTimeout(() => {
+        router.push("/create-quiz");
+      }, 2000);
     } else {
       setQuizId(id);
     }
-  }, [id, router]);
+  }, [id, router, toastDisplayed]);
 
   const currentBaseUrl = window.location.origin;
   const baseUrl = currentBaseUrl.includes("localhost:3000")
@@ -25,9 +40,20 @@ export default function Page({ params }: { params: { id: string } }) {
   const quizLink = `${baseUrl}/quiz/${quizId}`;
 
   const copyToClipboard = () => {
-    if (quizId) {
+    if (quizLink) {
       navigator.clipboard.writeText(quizLink);
-      alert("Link copied to clipboard!");
+      toast.success("Link copied to clipboard!", {
+        position: "bottom-right",
+        autoClose: 3000,
+        hideProgressBar: false,
+        closeOnClick: false,
+        pauseOnHover: false,
+        draggable: true,
+        progress: undefined,
+        theme: "colored",
+        transition: Bounce,
+        style: { backgroundColor: "#C3F094", color: "black" },
+      });
     }
   };
 
@@ -46,7 +72,7 @@ export default function Page({ params }: { params: { id: string } }) {
         <p
           role="button"
           onClick={copyToClipboard}
-          className="p-3 px-5 rounded-lg text-lg bg-gray-200 hover:bg-gray-300 active:bg-gray-300"
+          className="p-3 px-5 rounded-lg text-lg bg-gray-100 hover:bg-gray-300 active:bg-gray-200"
         >
           {quizLink}
         </p>

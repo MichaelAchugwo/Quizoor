@@ -6,6 +6,7 @@ import { poppins } from "./fonts/poppins";
 import { useEffect } from "react";
 import { redirect } from "next/navigation";
 import { usePathname } from "next/navigation";
+import { ToastContainer } from "react-toastify";
 
 export default function RootLayout({
   children,
@@ -29,6 +30,7 @@ export default function RootLayout({
         <Analytics />
         <SpeedInsights />
         {children}
+        <ToastContainer />
       </body>
     </html>
   );

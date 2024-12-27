@@ -2,8 +2,9 @@
 import { useEffect, useRef, useState } from "react";
 import { getQuiz, Question } from "@/app/lib/actions"; // Assuming this function fetches the quiz data
 import Loader from "@/app/(quiz)/extras/Loader";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import GeneratePDF from "@/app/lib/GeneratePdf";
+import { toast, Bounce } from "react-toastify";
 
 type Result = {
   name: string;
@@ -31,6 +32,8 @@ export default function ResultsPage() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const tableRef = useRef<HTMLTableElement | null>(null);
+  const [toastDisplayed, setToastDisplayed] = useState(false);
+  const router = useRouter();
 
   useEffect(() => {
     const fetchQuiz = async () => {
@@ -52,7 +55,24 @@ export default function ResultsPage() {
     } else {
       document.title = "Loading Quiz...";
     }
-  }, [quiz]);
+    if (quiz && quiz.results.length === 0 && !toastDisplayed) {
+      toast.error("No results available for that quiz", {
+        position: "bottom-right",
+        autoClose: 2000,
+        hideProgressBar: false,
+        closeOnClick: false,
+        pauseOnHover: false,
+        draggable: true,
+        progress: undefined,
+        theme: "colored",
+        transition: Bounce,
+      });
+      setToastDisplayed(true);
+      setTimeout(() => {
+        router.push("/quiz");
+      }, 2000);
+    }
+  }, [quiz, toastDisplayed, router]);
 
   if (loading) {
     return <Loader />;
@@ -62,11 +82,7 @@ export default function ResultsPage() {
     return <p>Error: {error}</p>;
   }
 
-  if (quiz === null || quiz.results.length === 0) {
-    return <p>No results available for this quiz.</p>;
-  }
-
-  const sortedResults = quiz.results.sort((a, b) => b.score - a.score);
+  const sortedResults = quiz?.results.sort((a, b) => b.score - a.score) || [];
   const now = new Date();
   const start = new Date(quiz?.startTime || "");
 
@@ -84,7 +100,7 @@ export default function ResultsPage() {
   return (
     <div className="mt-7">
       <h1 className="text-2xl font-bold text-center mb-6">
-        {quiz.quizName} - Results
+        {quiz?.quizName} - Results
       </h1>
       <div className="overflow-x-auto">
         <table
@@ -95,7 +111,9 @@ export default function ResultsPage() {
             <tr>
               <th className="py-2 px-4 border-b">Rank</th>
               <th className="py-2 px-4 border-b">Name</th>
-              <th className="py-2 px-4 border-b">{quiz.identification_name}</th>
+              <th className="py-2 px-4 border-b">
+                {quiz?.identification_name}
+              </th>
               <th className="py-2 px-4 border-b">Score</th>
             </tr>
           </thead>
@@ -117,7 +135,7 @@ export default function ResultsPage() {
           </tbody>
         </table>
         <div className="flex justify-center py-7">
-          <GeneratePDF tableRef={tableRef} quizName={quiz?.quizName} />
+          <GeneratePDF tableRef={tableRef} quizName={quiz?.quizName || ""} />
         </div>
       </div>
     </div>
