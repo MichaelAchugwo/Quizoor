@@ -244,7 +244,7 @@ export default function Page({ params }: { params: { id: string } }) {
         <div className="my-6 text-center">
           <h1 className="text-2xl font-bold mb-4">{quiz?.quizName}</h1>
           <p className="mb-6 text-gray-400">Created by: {quiz?.creatorName}</p>
-          <p className="text-red-500 text-lg mb-7">
+          <p className="text-red-500 text-lg mb-10">
             This quiz has not started yet. Please check back later.
           </p>
           <Link href="/quiz" className="p-3 px-5 bg-[#066C5D] text-white rounded-lg">Check out Other Quizzes</Link>
