@@ -5,6 +5,8 @@ import Loader from "@/app/(quiz)/extras/Loader";
 import { usePathname, useRouter } from "next/navigation";
 import GeneratePDF from "@/app/lib/GeneratePdf";
 import { toast, Bounce } from "react-toastify";
+import Link from "next/link";
+import { ArrowBackIos } from "@mui/icons-material";
 
 type Result = {
   name: string;
@@ -134,8 +136,12 @@ export default function ResultsPage() {
             ))}
           </tbody>
         </table>
-        <div className="flex justify-center py-7">
+        <div className="flex justify-center gap-x-4 py-9">
           <GeneratePDF tableRef={tableRef} quizName={quiz?.quizName || ""} />
+          <Link href="/quiz" className="bg-gray-300 p-3 px-5 rounded-lg">
+            <ArrowBackIos />
+            Back to Quizzes
+          </Link>
         </div>
       </div>
     </div>
