@@ -19,8 +19,7 @@ export default function RootLayout({
 }>) {
   const router = useRouter();
   const pathName = usePathname();
-  const truncatedPath = `/${pathName.split('/')[1]}`;
-  const redirectUrl = `/login?redirectUrl=/${encodeURIComponent(truncatedPath)}`;
+  const redirectUrl = `/login?redirectUrl=/${encodeURIComponent(pathName)}`;
   const [loading, setLoading] = useState<boolean>(true);
 
   useEffect(() => {
