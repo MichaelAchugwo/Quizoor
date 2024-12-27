@@ -64,7 +64,7 @@ export default function Page({ params }: { params: { id: string } }) {
   return (
     <div className="flex flex-col items-center justify-center min-h-[75dvh] p-4">
       <h1 className="text-2xl font-bold mb-4">Quiz Link Created</h1>
-      <p className="text-gray-700 mb-6">
+      <p className="text-gray-700 mb-6 text-center">
         Share the link below with participants to allow them to access your
         quiz.
       </p>
@@ -72,7 +72,7 @@ export default function Page({ params }: { params: { id: string } }) {
         <p
           role="button"
           onClick={copyToClipboard}
-          className="p-3 px-5 rounded-lg text-lg bg-gray-100 hover:bg-gray-300 active:bg-gray-200"
+          className="p-3 px-5 rounded-lg text-lg w-4/5 md:w-auto overflow-x-scroll md:overflow-hidden bg-gray-100 hover:bg-gray-200 active:bg-gray-200"
         >
           {quizLink}
         </p>
