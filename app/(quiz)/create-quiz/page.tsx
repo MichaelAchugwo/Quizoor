@@ -1,5 +1,5 @@
 "use client";
-import { checkSession, createQuiz, getAllQuizzes } from "@/app/lib/actions";
+import { checkSession, createQuiz, getAllQuizzes, Quiz } from "@/app/lib/actions";
 import { useRouter } from "next/navigation";
 import { useRef, useState, useEffect } from "react";
 import AddIcon from "@mui/icons-material/Add";
@@ -149,7 +149,7 @@ export default function Home() {
       );
       const allQuizzes = await getAllQuizzes();
       const createdQuiz = allQuizzes.find(
-        (quiz: unknown) => quiz.quizName === name.value.trim()
+        (quiz: Quiz) => quiz.quizName === name.value.trim()
       );
       if (createdQuiz) {
         router.push(`/quiz/link/${createdQuiz._id}`);
