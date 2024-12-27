@@ -134,7 +134,7 @@ function Home() {
         />
         <button
           type="submit"
-          className="bg-[#066C5D] text-white px-4 py-2 rounded-md hover:bg-[#066c5de9]"
+          className="bg-[#066C5D] text-white px-4 py-2 rounded-md hover:opacity-75"
         >
           Find Quiz
         </button>
@@ -142,7 +142,7 @@ function Home() {
           <button
             type="button"
             onClick={resetQuizPage}
-            className="bg-gray-400 text-white px-4 py-2 mt-3 md:mt-0 rounded-md hover:bg-gray-300 ml-4"
+            className="bg-gray-400 text-white px-4 py-2 mt-3 md:mt-0 rounded-md hover:opacity-75 ml-4"
           >
             Reset
           </button>
@@ -182,13 +182,13 @@ function Home() {
                     <div className="text-right md:flex md:gap-4">
                       <Link
                         href={`/quiz/${quiz._id}`}
-                        className="inline-block bg-[#066C5D] text-white p-2 px-4 rounded-lg hover:bg-[#066c5de9]"
+                        className="inline-block bg-[#066C5D] text-white p-2 px-4 rounded-lg hover:opacity-75"
                       >
                         Take Quiz
                       </Link>
                       <Link
                         href={`/quiz/${quiz._id}/results`}
-                        className="inline-block ml-3 md:ml-0 bg-gray-400 text-white p-2 px-4 rounded-lg hover:bg-gray-300"
+                        className="inline-block ml-3 md:ml-0 bg-gray-400 text-white p-2 px-4 rounded-lg hover:opacity-75"
                       >
                         Results
                       </Link>

@@ -1,9 +1,9 @@
 "use client";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { getQuiz, Question } from "@/app/lib/actions"; // Assuming this function fetches the quiz data
 import Loader from "@/app/(quiz)/extras/Loader";
 import { usePathname } from "next/navigation";
-import Link from "next/navigation"
+import GeneratePDF from "@/app/lib/GeneratePdf";
 
 type Result = {
   name: string;
@@ -30,6 +30,7 @@ export default function ResultsPage() {
   const [quiz, setQuiz] = useState<Quiz | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const tableRef = useRef<HTMLTableElement | null>(null);
 
   useEffect(() => {
     const fetchQuiz = async () => {
@@ -86,7 +87,10 @@ export default function ResultsPage() {
         {quiz.quizName} - Results
       </h1>
       <div className="overflow-x-auto">
-        <table className="min-w-full bg-white border border-gray-300 rounded-lg shadow-lg">
+        <table
+          ref={tableRef}
+          className="min-w-full bg-white border border-gray-300 rounded-lg shadow-lg"
+        >
           <thead className="bg-gray-100">
             <tr>
               <th className="py-2 px-4 border-b">Rank</th>
@@ -112,6 +116,9 @@ export default function ResultsPage() {
             ))}
           </tbody>
         </table>
+        <div className="flex justify-center py-7">
+          <GeneratePDF tableRef={tableRef} quizName={quiz?.quizName} />
+        </div>
       </div>
     </div>
   );

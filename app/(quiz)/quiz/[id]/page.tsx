@@ -338,14 +338,14 @@ export default function Page({ params }: { params: { id: string } }) {
               {currentIndex < quiz.questions.length - 1 ? (
                 <button
                   onClick={handleNext}
-                  className="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600"
+                  className="px-4 py-2 bg-blue-500 text-white rounded-md hover:opacity-75"
                 >
                   Next
                 </button>
               ) : (
                 <button
                   onClick={handleSubmit}
-                  className="px-4 py-2 bg-[#066C5D] text-white rounded-md hover:bg-opacity-75"
+                  className="px-4 py-2 bg-[#066C5D] text-white rounded-md hover:opacity-75"
                 >
                   Submit
                 </button>

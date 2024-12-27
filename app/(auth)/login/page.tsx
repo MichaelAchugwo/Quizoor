@@ -42,7 +42,7 @@ export default function LoginPage() {
         </div>
         <div className="mt-8" suppressHydrationWarning>
           <button
-            className="py-3 px-5 bg-[#066C5D] hover:bg-[#066c5de9] text-white font-semibold flex justify-center gap-4 w-full rounded-md"
+            className="py-3 px-5 bg-[#066C5D] hover:opacity-75 text-white font-semibold flex justify-center gap-4 w-full rounded-md"
             onClick={() => {
               signInToGoogle(redirectUrl);
             }}
