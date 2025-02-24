@@ -16,28 +16,30 @@ export default function RootLayout({
     setLoading(false);
   }, []);
   return (
-    <>
-      <video
-        autoPlay
-        muted
-        loop
-        playsInline
-        disablePictureInPicture
-        controls={false}
-        className={`${styles.backgroundVideo}`}
-      >
-        <source src="/videos/backgroundVideo.mp4" type="video/mp4" />
-        Your browser does not support the video tag.
-      </video>
-      <Navbar />
+    <div>
       {loading ? (
         <Loader />
       ) : (
-        <div className="overflow-y-scroll max-h-[85dvh] no-scrollbar text-white">
-          {children}
-        </div>
+        <>
+          <video
+            autoPlay
+            muted
+            loop
+            playsInline
+            disablePictureInPicture
+            controls={false}
+            className={`${styles.backgroundVideo}`}
+          >
+            <source src="/videos/backgroundVideo.mp4" type="video/mp4" />
+            Your browser does not support the video tag.
+          </video>
+          <Navbar />
+          <div className="overflow-y-scroll max-h-[85dvh] no-scrollbar text-white">
+            {children}
+          </div>
+        </>
       )}
       <Footer />
-    </>
+    </div>
   );
 }
