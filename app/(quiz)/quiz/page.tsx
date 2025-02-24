@@ -61,10 +61,10 @@ function Home() {
 
   useEffect(() => {
     const interval = setInterval(() => {
-      setFilteredQuizzes((prev) => [...prev]); // Trigger re-render for timer updates
-    }, 60000); // Update every minute
+      setFilteredQuizzes((prev) => [...prev]);
+    }, 60000);
 
-    return () => clearInterval(interval); // Cleanup interval on unmount
+    return () => clearInterval(interval);
   }, []);
 
   const handleSearch = (event: React.FormEvent<HTMLFormElement>) => {
@@ -94,7 +94,7 @@ function Home() {
       const diff = end.getTime() - now.getTime();
       return formatTime(diff, "ends in");
     } else {
-      return "Event ended";
+      return "Quiz ended";
     }
   };
 
@@ -157,12 +157,10 @@ function Home() {
             {filteredQuizzes.length === 0 ? (
               <p>No quizzes found.</p>
             ) : (
-              filteredQuizzes
-                .filter((quiz) => {
-                  const endTime = new Date(quiz.endTime).getTime();
-                  return endTime > new Date().getTime();
-                })
-                .map((quiz) => (
+              filteredQuizzes.map((quiz) => {
+                const endTime = new Date(quiz.endTime).getTime();
+                const isEnded = endTime <= new Date().getTime();
+                return (
                   <li
                     key={quiz._id}
                     className="my-4 p-6 bg-white rounded-lg shadow-lg border border-gray-200 md:flex md:place-items-center md:justify-between"
@@ -180,21 +178,24 @@ function Home() {
                       </p>
                     </div>
                     <div className="text-right md:flex md:gap-4">
-                      <Link
-                        href={`/quiz/${quiz._id}`}
-                        className="inline-block bg-[#066C5D] text-white p-2 px-4 rounded-lg hover:opacity-75"
-                      >
-                        Take Quiz
-                      </Link>
+                      {!isEnded && (
+                        <Link
+                          href={`/quiz/${quiz._id}`}
+                          className="inline-block bg-gray-400 text-white p-2 px-4 rounded-lg hover:opacity-75"
+                        >
+                          Take Quiz
+                        </Link>
+                      )}
                       <Link
                         href={`/quiz/${quiz._id}/results`}
-                        className="inline-block ml-3 md:ml-0 bg-gray-400 text-white p-2 px-4 rounded-lg hover:opacity-75"
+                        className="inline-block ml-3 md:ml-0 bg-[#066C5D] text-white p-2 px-4 rounded-lg hover:opacity-75 !opacity-100"
                       >
                         Results
                       </Link>
                     </div>
                   </li>
-                ))
+                );
+              })
             )}
           </ul>
         )}
