@@ -158,6 +158,18 @@ export default function Home() {
         (quiz: Quiz) => quiz.quizName === name.value.trim()
       );
       if (createdQuiz) {
+        toast.success("Quiz Created! Redirecting you...", {
+          position: "bottom-right",
+          autoClose: 3000,
+          hideProgressBar: false,
+          closeOnClick: false,
+          pauseOnHover: false,
+          draggable: true,
+          progress: undefined,
+          theme: "colored",
+          transition: Bounce,
+          style: { backgroundColor: "#C3F094", color: "black" },
+        });
         router.push(`/quiz/link/${createdQuiz._id}`);
       } else {
         throw new Error("Error creating quiz");

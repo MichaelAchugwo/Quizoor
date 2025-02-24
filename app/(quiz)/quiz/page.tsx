@@ -34,10 +34,15 @@ function Home() {
   const fetchQuizzes = async () => {
     try {
       const data = await getAllQuizzes();
-      const sortedQuizzes = data.sort(
-        (a, b) =>
-          new Date(a.startTime).getTime() - new Date(b.startTime).getTime()
-      );
+      const sortedQuizzes = data.sort((a, b) => {
+        const now = new Date().getTime();
+        const aEndTime = new Date(a.endTime).getTime();
+        const bEndTime = new Date(b.endTime).getTime();
+        
+        if (aEndTime > now && bEndTime <= now) return -1;
+        if (aEndTime <= now && bEndTime > now) return 1;
+        return new Date(a.startTime).getTime() - new Date(b.startTime).getTime();
+      });
       setQuizzes(sortedQuizzes);
       setFilteredQuizzes(sortedQuizzes);
     } catch (error) {
