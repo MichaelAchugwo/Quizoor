@@ -37,6 +37,7 @@ export default function Page({ params }: { params: { id: string } }) {
   const [quiz, setQuiz] = useState<Quiz | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
+  const [submitting, setSubmitting] = useState<boolean>(false);
   const [currentIndex, setCurrentIndex] = useState<number>(0);
   const [selectedOptions, setSelectedOptions] = useState<string[]>([]);
   const [identity, setIdentity] = useState("");
@@ -146,6 +147,8 @@ export default function Page({ params }: { params: { id: string } }) {
 
   const handleSubmit = async () => {
     if (quiz) {
+      if (submitting) return;
+      setSubmitting(true);
       try {
         const correctAnswers = quiz.questions.filter(
           (q, index) => q.correctOption === selectedOptions[index]
@@ -189,20 +192,17 @@ export default function Page({ params }: { params: { id: string } }) {
       setIdentity(identityName.value);
       setShowQuiz(true);
     } else {
-      toast.error(
-        "Please Enter your identification name.",
-        {
-          position: "bottom-right",
-          autoClose: 4000,
-          hideProgressBar: false,
-          closeOnClick: false,
-          pauseOnHover: false,
-          draggable: true,
-          progress: undefined,
-          theme: "colored",
-          transition: Bounce,
-        }
-      );
+      toast.error("Please Enter your identification name.", {
+        position: "bottom-right",
+        autoClose: 4000,
+        hideProgressBar: false,
+        closeOnClick: false,
+        pauseOnHover: false,
+        draggable: true,
+        progress: undefined,
+        theme: "colored",
+        transition: Bounce,
+      });
     }
   };
 
@@ -246,7 +246,12 @@ export default function Page({ params }: { params: { id: string } }) {
           <p className="text-red-500 text-lg mb-10">
             This quiz has not started yet. Please check back later.
           </p>
-          <Link href="/quiz" className="p-3 px-5 bg-[#066C5D] text-white rounded-lg">Check out Other Quizzes</Link>
+          <Link
+            href="/quiz"
+            className="p-3 px-5 bg-[#066C5D] text-white rounded-lg"
+          >
+            Check out Other Quizzes
+          </Link>
         </div>
       );
     }
@@ -359,6 +364,7 @@ export default function Page({ params }: { params: { id: string } }) {
                 <button
                   onClick={handleSubmit}
                   className="px-4 py-2 bg-[#066C5D] text-white rounded-md hover:opacity-75"
+                  disabled={submitting}
                 >
                   Submit
                 </button>
